@@ -1,0 +1,165 @@
+const app = require('../app'); // Importa la aplicación principal de Express
+const debug = require('debug')('miprimerapi:server'); // Utiliza debug para la depuración
+const http = require('http'); // Importa el módulo http para crear el servidor
+const figlet = require('figlet'); // Importa figlet para generar texto ASCII
+const pkg = require('../package.json'); // Importa el archivo package.json
+const chalk = require('chalk'); // Importa chalk para colorear la salida en la consola
+const os = require('os'); // Importa os para obtener información del sistema operativo
+
+// Verificamos si existe un archivo de variables globales
+// si existe lo usamos (NODE_ENV), si no existe usamos el por defecto (.env creado por nosotros en la carpta raiz)
+
+// IF TERNARIO => (condicion) ? (true) : (false)
+const env_path = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
+
+// Carga las variables de entorno desde el archivo .env o NODE_ENV segun corresponda
+require('dotenv').config({ path: env_path });
+
+// Configuramos un puerto de acceso a nuestra APP
+const port = process.env.PORT || 3000;
+app.set('port', port);
+
+
+// Crea el servidor HTTP usando la aplicación de Express
+const server = http.createServer(app);
+
+// Hacemos que el servidor (nuestra aplicación APP) escuche por un PUERTO
+// en caso de que escuche una petición ejecuta la función printTitle()
+// en caso de que tenga un error ejecuta la función onError()
+server.listen(port, printTitle);
+server.on('error', onError);
+server.on('listening', onListening);
+
+// Función que maneja los errores del servidor
+function onError(error) {
+    // ===    !==   comparacion estricta (tipo y dato)
+    switch (error.code) {
+        case 'EACCES': // Error de permisos
+            // Este error ocurre cuando el proceso no tiene los permisos necesarios para acceder al puerto o pipe
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1); // Salimos del proceso con un código de error
+            break;
+
+        case 'EADDRINUSE': // Error de dirección en uso
+            // Este error ocurre cuando el puerto o pipe ya está en uso por otro proceso
+            console.error(bind + ' is already in use');
+            process.exit(1); // Salimos del proceso con un código de error
+            break;
+
+        case 'ECONNREFUSED': // Error de conexión rechazada
+            // Este error ocurre cuando la conexión es rechazada por el servidor
+            // Ejemplo: Intentar conectar a un servidor que no está escuchando en el puerto especificado
+            console.error('Connection refused to ' + bind);
+            process.exit(1); // Salimos del proceso con un código de error
+            break;
+
+        case 'ECONNRESET': // Error de conexión reiniciada
+            // Este error ocurre cuando la conexión es inesperadamente cerrada por el servidor
+            // Ejemplo: El servidor cierra la conexión antes de que el cliente termine la solicitud
+            console.error('Connection reset by peer ' + bind);
+            process.exit(1); // Salimos del proceso con un código de error
+            break;
+
+        case 'ENOTFOUND': // Error de dirección no encontrada
+            // Este error ocurre cuando no se puede resolver el nombre de dominio a una dirección IP
+            // Ejemplo: Intentar conectar a un dominio que no existe
+            console.error('DNS lookup failed for ' + bind);
+            process.exit(1); // Salimos del proceso con un código de error
+            break;
+
+        case 'ETIMEDOUT': // Error de tiempo de espera agotado
+            // Este error ocurre cuando la conexión al servidor tarda demasiado y expira
+            // Ejemplo: Intentar conectar a un servidor que está tardando en responder
+            console.error('Connection timed out to ' + bind);
+            process.exit(1); // Salimos del proceso con un código de error
+            break;
+
+        case 'EHOSTUNREACH': // Error de host inalcanzable
+            // Este error ocurre cuando no se puede alcanzar el host especificado
+            // Ejemplo: Intentar conectar a un servidor en una red diferente que no es accesible
+            console.error('No route to host for ' + bind);
+            process.exit(1); // Salimos del proceso con un código de error
+            break;
+
+        case 'ENETUNREACH': // Error de red inalcanzable
+            // Este error ocurre cuando no se puede alcanzar la red especificada
+            // Ejemplo: Intentar conectar a un servidor cuando no hay conexión a Internet
+            console.error('Network is unreachable for ' + bind);
+            process.exit(1); // Salimos del proceso con un código de error
+            break;
+
+        default: // Error no manejado
+            // Si el error no es uno de los casos manejados, lo lanzamos
+            throw error;
+    }
+}
+
+// Función que se ejecuta cuando el servidor está escuchando
+function onListening() {
+    const addr = server.address(); // Obtiene la dirección del servidor
+    const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port; // Define el tipo de dirección
+    debug('Listening on ' + bind); // Imprime la dirección en la consola de depuración
+    // 127.0.0.1:3000  <- (es un String)
+    /* { 
+            address: 127.0.0.1,
+            port: 3000 
+        }  <- (es un objeto)
+    */
+}
+
+// Función que imprime el título de la aplicación y otras especificaciones
+// Este sector imprime en la consola/terminal del servidor
+function printTitle() {
+    process.stdout.write('\n');
+    // Genera y colorea el texto usando figlet y chalk
+    process.stdout.write(chalk.blue(figlet.textSync('Base  API - ET32', { font: 'Ogre' })) + '\n');
+    process.stdout.write('\n');
+    // Imprime detalles del package.json
+    process.stdout.write(chalk.bold(`Name: `) + chalk.green(`${pkg.name}\n`));
+    process.stdout.write(chalk.bold(`Version: `) + chalk.green(`${pkg.version}\n`));
+    process.stdout.write(chalk.bold(`Description: `) + chalk.green(`${pkg.description}\n`));
+    process.stdout.write(chalk.bold(`Author: `) + chalk.green(`${pkg.author}\n`));
+    process.stdout.write(chalk.bold(`Environment: `) + chalk.green(`${process.env.NODE_ENV || 'default'}\n`));
+
+    // Mostrar la dirección IP local
+    const ip = getLocalIP();
+    process.stdout.write(chalk.bold(`Local IP: `) + chalk.green(`${ip}\t`));
+
+    if (process.env.NODE_ENV !== 'production') {
+        process.stdout.write(chalk.bold(`Listening on port: `) + chalk.green(`${process.env.PORT || 3000}\n`));
+    }
+
+    // Mostrar algunas variables del archivo .env
+    process.stdout.write(chalk.bold(`Tipe DB: `) + chalk.green(`${process.env.DATABASE_TYPE || 'Not set'}\n`));
+    process.stdout.write(chalk.bold(`User: `) + chalk.green(`${process.env.DATABASE_USER || 'Not set'}\n`));
+    process.stdout.write(chalk.bold(`Pass: `) + chalk.green(`${process.env.DATABASE_PASS || 'Not set'}\n`));
+    process.stdout.write(chalk.bold(`Database: `) + chalk.green(`${process.env.DATABASE_DB || 'Not set'}\n`));
+    process.stdout.write(chalk.bold(`Database URL: `) + chalk.green(`${process.env.DATABASE_URL || 'Not set'}\n`));
+
+    process.stdout.write(chalk.bold(`API Key (publ): `) + chalk.green(`${process.env.API_KEY_PUBLIC || 'Not set'}\n`));
+    process.stdout.write(chalk.bold(`API Key (priv): `) + chalk.green(`${process.env.API_KEY_PRIVATE || 'Not set'}\n`));
+
+    // Mostrar los scripts definidos en package.json
+    process.stdout.write(chalk.bold(`Scripts:\n`));
+    for (const script in pkg.scripts) {
+        process.stdout.write(chalk.green(`  ${script}: ${pkg.scripts[script]}\n`));
+    }
+
+    // Imprime un mensaje indicando que el servicio está a la escucha
+    process.stdout.write(chalk.yellow(figlet.textSync('|   Servicio a la escucha  |', { font: 'Ogre' })) + '\n');
+    process.stdout.write('\n');
+}
+
+
+// Función para obtener la IP local
+function getLocalIP() {
+    const interfaces = os.networkInterfaces();
+    for (let iface in interfaces) {
+        for (let alias of interfaces[iface]) {
+            if (alias.family === 'IPv4' && !alias.internal) {
+                return alias.address;
+            }
+        }
+    }
+    return 'IP no disponible' // Retorna este mensaje si no se encuentra la IP
+}
