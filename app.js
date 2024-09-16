@@ -7,7 +7,7 @@ const cors = require('cors') // Middleware para habilitar CORS (Cross-Origin Res
 // Importa los routers y middlewares personalizados
  // Router para manejar rutas relacionadas con el estado del servidor
 const stockRouter = require('./routers/stock')
-
+const empleado = require ('./routers/empleado')
 
 
 // Crea una aplicación Express
@@ -43,8 +43,7 @@ app.get('/favicon.ico', (req, res) => res.status(204)) // Responde con un códig
 
 // Rutas principales de la aplicación
 app.use('/stock',  stockRouter )
-
-
+app.use('/empleado', empleado)
 
 
 // Middleware de manejo de errores

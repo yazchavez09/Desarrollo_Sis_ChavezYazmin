@@ -1,18 +1,12 @@
 const express = require('express'); // Importa el módulo Express para construir aplicaciones web
 const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
 
-
-
-const Producto = require('../schemas/producto')
-
 // Define una ruta para las solicitudes HTTP GET a '/home'
 // Esta ruta es relativa a donde se monte este enrutador. Por ejemplo, si se monta en '/api',
 // esta ruta se corresponderá a '/api/home'.
-router.get('/mostrarTodo', findAll)
-router.get('/mostrarPorId/:pepito', findAll)
-router.get('/mostrarPorRango/destini/:i/fecha/:f/libre', findAll)
-router.post('/agregar' , agregarStock)
-
+router.post('/agregar', agregarEmpleado)
+router.put('/modificarPorDni/:dni', modificarEmpleado)
+router.get('/mostrar', mostrarEmpleado)
 
 //localhost:2000/DonJuan/stock/mostrarPorId/50
 
@@ -29,38 +23,89 @@ router.post('/agregar' , agregarStock)
 
 
 
-async function agregarStock(req,res)
-{
-    const json = req.body
 
-    if( !json || !json.id_prod  )
-        res.status(404).json({msg:"faltan datos para insertar"})
+function agregarEmpleado (req, res){
 
-    const result = await Producto.create( json );
+    //0° Verificar permisos del usuairo para poder realzar esta accion
+    if (true)
+        res.status(401)
 
-    if( !result )
-        res.status(404).json({msg:'no se pudo gruardar'})
+    //1° recuperamos info desde PARAM o de BODY
+    const body = req.body
 
-    res.status(201).json( result )   
-    //res.status(201).json( {msg: 'datos guardados con exito.'} )  
+    //2° verificamos que los datos recuperados esten validos 
+    if (body === '' || body.username === '')
+        res.status(404).json({ msg: "Campos incompletos" })
+
+    if (dni === '')
+        res.status(404).json({ msg: "Campos incompletos" })
+
+
+    //3° conexion DB y Consultas
+    const DB = { msg: "asasas" }
+
+    //4° verificamos que los datos devuelto por la DB esten correcto y no VACIO
+    if (DB === '')
+        res.status(500).json({ msg: "error en DB" })
+
+
+    //5°  logica de negocios & post-procesado de datos a enviar
+    const datos = {nombre:"asasas"};
+
+    //6° validar que los datos post-procesados esten todos correcto
+    if (datos === '')
+        res.status(500).json({ msg: "error en los datos a enviar" })
+
+    //7° devolver informacion pedida al usuario
+    const zapato = body.precio
+    res.status(200).json({zapato})
 }
 
-/*
-    “id_prod”: int,
-    “nombre_prod”: String,
-    “precio_compra”: float,
-    “precio_venta”: float,
-    “comercializable”: boolean.
-*/
+function modificarEmpleado (req, res){
 
-function findAll(req, res) {
     //0° Verificar permisos del usuairo para poder realzar esta accion
     if (true)
         res.status(401)
 
     //1° recuperamos info desd PARAM o de BODY
     const body = req.body
-    const id = req.params.pepito
+    const dni = req.params.dni
+
+    //2° verificamos que los datos recuperados esten validos 
+    if (body === '' || body.username === '')
+        res.status(404).json({ msg: "faltan datos" })
+
+    if (dni === '')
+        res.status(404).json({ msg: "faltan datos" })
+
+
+    //3° conexion DB y Consultas
+    const DB = { msg: "asasas" }
+
+    //4° verificamos que los datos devuelto por la DB esten correcto y no VACIO
+    if (DB === '')
+        res.status(500).json({ msg: "error en DB" })
+
+
+    //5°  logica de negocios & post-procesado de datos a enviar
+    const datos = {nombre:"asasas"};
+
+    //6° validar que los datos post-procesados esten todos correcto
+    if (datos === '')
+        res.status(500).json({ msg: "error en los datos a enviar" })
+
+    //7° devolver informacion pedida al usuario
+    const zapato = body.precio
+    res.status(200).json({zapato})
+}
+
+function mostrarEmpleado (req, res){
+        //0° Verificar permisos del usuairo para poder realzar esta accion
+        if (true)
+        res.status(401)
+
+    //1° recuperamos info desd PARAM o de BODY
+    const body = req.body
 
     //2° verificamos que los datos recuperados esten validos 
     if (body === '' || body.username === '')
@@ -89,7 +134,6 @@ function findAll(req, res) {
     const zapato = body.precio
     res.status(200).json({zapato})
 }
-
 
 
 function metodosParaRes(req, res) {
