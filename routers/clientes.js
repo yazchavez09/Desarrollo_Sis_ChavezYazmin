@@ -24,15 +24,13 @@ async function agregarCliente (req, res)
     
     const todos = await Cliente.findAll()
     //falto seleccionar el ultimo json disponible
-    const AI = todos.id_cliente + 1
-
-    const result = await Cliente.create( { id_cliente: AI , persona: pers._id } )
+    
+    const result = await Cliente.create( { DNI: pers.dni } )
     if( !result )
         res.status(404).json({msg:'no se pudo gruardar'})
 
     res.status(201).json( {ID: result.id_cliente} )   
 }
-
 /*
  {
     "persona": 36589751256

@@ -1,6 +1,9 @@
 const express = require('express'); // Importa el módulo Express para construir aplicaciones web
 const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
 
+
+const Facturacion = require('../models/SQL_Facturacion');
+
 // esta ruta se corresponderá a '/api/home'.
 router.post('/agregar', agregarVenta)
 router.put('/modificar/:nro_factura', modificarVenta) // sin modificar
@@ -48,8 +51,7 @@ async function modificarVenta (req, res){
     if ( !json || !json.id_cliente )
         res.status(404).json({ msg: "faltan datos" })
 
-        const factura = await Facturas.findById(id); //tabla?
-        
+        const factura = await Facturacion.findById(id); //tabla
         // Verificar si fue encontrada
         if (!factura) {
             res.status(404).json({msg:"faltan datos para insertar"})
