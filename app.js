@@ -44,6 +44,9 @@ app.get('/favicon.ico', (req, res) => res.status(204)) // Responde con un códig
 // Rutas principales de la aplicación
 app.use('/stock',  stockRouter )
 app.use('/empleado', empleado)
+app.use('/cliente', ClienteRouter)
+app.use('/venta', ventaRouter)
+app.use('/factura', facturaRouter)
 
 
 // Middleware de manejo de errores
