@@ -11,18 +11,22 @@ router.get('/mostrar:fecha', mostrarFacturaPorF)
 
 async function agregarFactura(req, res, next){
     try {
-        // Obtener los datos 
-        const body = req.body;
+        
+        if(!body )
+        res.status(404).json({ msg: "faltan datos para insertar" })
 
-        // Verificar que el cuerpo de la solicitud no esté vacío
-        if (!body) {
-            res.status(404).json({msg:"faltan datos para insertar"})
-        }
-        const result = await Facturacion.create(body); //CREA Factura
+        const { dni, nombre, apellido, email, telefono, direccion, id_rol } = body;
 
-        if (!result)
-        res.status(404).json({ msg: "no se pudo insetar los datos en la DB" })
-    
+        const persona = await Carrito.create(
+            { dni, nombre, apellido, email, telefono, direccion }
+        )
+
+
+        const usuario = await Usuario.create(
+            { id_rol, dni }
+        ) //crea usuario
+
+
         // Guardada correctamente
         res.status(201).json({
             msg: "Se agregó factura"});

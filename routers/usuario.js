@@ -22,29 +22,72 @@ async function agregarUs(req, res) {
         if (!body || !body.id_us) //
             res.status(404).json({ msg: "faltan datos para insertar" })
 
-        const usuario = await Usuario.create(json) //crea usuario
-        //registro tabla persona?
+        const { dni, nombre, apellido, email, telefono, direccion, id_rol } = body;
+
+        const persona = await Persona.create(
+            { dni, nombre, apellido, email, telefono, direccion }
+        )
+
+
+        const usuario = await Usuario.create(
+            { id_rol, dni }
+        ) //crea usuario
+
+
 
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+    /*
+    [
+        {
+        "dni": 542575,
+        "nombre": "ssssss",
+        "apellido": "aaaaaa", 
+        "email":"asas@gmail.com",  
+        "telefono": 4567895, 
+        "direccion": "saassa 555",
+        "id_rol" 5:
+        }
+
+    ]
+    */
 }
 
-async function modificarUs(req, res, next) { //nex?
+async function modificarUs(req, res, next) {
 
     try {
 
-        //0° Verificar permisos del usuairo para poder realzar esta accion
-        if (true)
-            res.status(401)
+        //localhost:2000/usuario/modificarPorId/5
 
-        const usuario = await Usuario.find();
+        //if( !req.isAdmin || !req.isEmpleado )
+        //    res.status(401);
 
-        if (!usuario) {
+        const body = req.body;
+
+        const persona = await Persona.findByPK(req.params.dni);
+
+        if (!persona) {
             return res.status(400).json({ msg: "No se encontraron datos" });
         }
 
-        //algo?
+        const usuario = await Usuario.find({ dni: req.params.dni });
+
+        persona = {
+            nombre: body.nombre || persona.nombre,
+            apellido: body.apellido,
+        };
+
+        //verificacion si existe rol
+
+
+        usuario = {
+            id_rol: body.id_rol || usuario.id_rol
+
+        };
+
+        await persona.update();
+        await usuario.update();
 
         res.status(201).json({
             msg: "Actualización echa con éxito"
@@ -57,27 +100,33 @@ async function modificarUs(req, res, next) { //nex?
 }
 
 async function mostrarEmpleados(req, res) {
-    //se ve por el rol
+
     try {
-        const id = req.params.id; //rol
-
-        if (!id)
-
-            res.status(404).json({ msg: "ID no encontrado" })
+        //const id = req.params.id; 
 
         // Buscar el empleado en la base de datos usando el ID 
-        const empleado = await Usuario.findById(id);
+        const users = await Usuario.findAll({
+            attributes: [], // Especifica los campos que deseas obtener de la tabla 'Usuario'
+            where: {
+                id_role: 2,
+                enable: true
+            },
+            include: [{
+                model: Persona,  // Incluye el modelo 'Persona'
+                attributes: [nombre, apellido, dni, direccion, correo, telefono] // Especifica los campos que deseas obtener de la tabla 'Persona'
+            }]
+        });
 
         // Verificar si el empleado fue encontrada
-        if (!empleado) {
-            return res.status(404).json({ msg: "Empleado no encontrada" });
-        }
+
 
         // Devolver los datos del empleado 
-        res.status(200).json(empleado);
+        // res.status(200).json(empleado);
     } catch (error) {
         // Manejar cualquier error
         res.status(500).json({ msg: "Error al procesar la solicitud" });
     }
+
+
 }
 
