@@ -1,35 +1,42 @@
 const express = require('express'); // Importa el módulo Express para construir aplicaciones web
 const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
 
-// Define una ruta para las solicitudes HTTP GET a '/home'
-// Esta ruta es relativa a donde se monte este enrutador. Por ejemplo, si se monta en '/api',
-// esta ruta se corresponderá a '/api/home'.
+const Cliente = require('../models');
+
 router.post('/agregar', agregarCliente)
-router.put('/modificarPorId/:id', modificarCliente)
-router.get('/mostrar', mostrarCliente)
+router.put('/modificarPorId/:id', modificarClientes)
+router.get('/mostrar', mostrarClientes)
 
 //localhost:2000/DonJuan/stock/mostrarPorId/50
 
-async function agregarCliente (req, res)
-{
-    const json = req.body
+async function agregarCliente(req, res) {
+    const { dni, nombre, apellido, email, telefono, direccion } = req.body;
 
-    if( !json || !json.id_cliente  ) //
-        res.status(404).json({msg:"faltan datos para insertar"})
+    // Validación de datos de entrada
+    if (!dni || !nombre || !apellido || !email || !telefono || !direccion) {
+        return res.status(400).json({ msg: "Faltan datos." });
+    }
 
-    const pers = await Persona.create( json ) //crea a persona
+    try {
+        // Crear una nueva entrada en la tabla Persona
+        const nuevaPersona = await Persona.create({
+            dni, nombre, apellido, email, telefono, direccion
+        });
 
-    if(!pers)
-        res.status(404)
-    
-    const todos = await Cliente.findAll()
-    //falto seleccionar el ultimo json disponible
-    
-    const result = await Cliente.create( { DNI: pers.dni } )
-    if( !result )
-        res.status(404).json({msg:'no se pudo gruardar'})
+        // Crear una nueva entrada en la tabla Cliente con referencia al DNI de Persona
+        const nuevoCliente = await Cliente.create({
+            DNI: nuevaPersona.dni
+        });
 
-    res.status(201).json( {ID: result.id_cliente} )   
+        res.status(201).json({
+            msg: "Cliente creado exitosamente",
+            persona: nuevaPersona,
+            cliente: nuevoCliente
+        });
+    } catch (error) {
+        console.error('Error al agregar cliente:', error);
+        res.status(500).json({ msg: 'Error interno del servidor' });
+    }
 }
 /*
  {
@@ -40,73 +47,61 @@ async function agregarCliente (req, res)
  }
 */
 
-function modificarCliente (req, res){
-    //0° Verificar permisos del usuairo para poder realzar esta accion
-    if (true)
-        res.status(401)
+async function modificarClientes(req, res, next) {
 
-    //1° recuperamos info desd PARAM o de BODY
-    const body = req.body
-    const dni = req.params.dni
+    try {
 
-    //2° verificamos que los datos recuperados esten validos 
-    if (body === '' || body.username === '')
-        res.status(404).json({ msg: "faltan datos" })
+        const body = req.body;
 
-    if (dni === '')
-        res.status(404).json({ msg: "faltan datos" })
+        const persona = await Persona.findByPK(req.params.id_us);
 
+        if (!persona) {
+            return res.status(400).json({ msg: "Persona no encontrada" });
+        }
 
-    //3° conexion DB y Consultas
-    const DB = { msg: "asasas" }
+        const cliente = await Cliente.find({ dni: req.params.dni });
 
-    if (DB === '')
-        res.status(500).json({ msg: "error en DB" })
+        persona = {
+            nombre: body.nombre || persona.nombre,
+            apellido: body.apellido,
+        };
 
-    const datos = {nombre:"asasas"};
+        //verificacion si existe rol
+        cliente = {
+            id_rol: body.id_rol || cliente.id_rol
+        };
 
-    if (datos === '')
-        res.status(500).json({ msg: "error en los datos a enviar" })
+        await persona.update();
+        await usuario.update();
 
-    const zapato = body.precio
-    res.status(200).json({zapato})
+        res.status(201).json({
+            msg: "Actualización éxitosa"
+        });
+
+    } catch (error) {
+        res.status(500).json({ msg: "Error al procesar la solicitud" });
+    }
+
 }
 
-function mostrarCliente (req, res){
-        //0° Verificar permisos del usuairo para poder realzar esta accion
-        if (true)
-        res.status(401)
+async function mostrarClientes(req, res) {
+    try {
+        const clientes = await Cliente.findAll({
+            include: {
+                model: Persona,
+                attributes: ['nombre', 'apellido', 'dni', 'direccion', 'email', 'telefono']
+            }
+        });
 
-    //1° recuperamos info desd PARAM o de BODY
-    const body = req.body
+        if (!clientes.length) {
+            return res.status(404).json({ msg: "No se encontraron clientes" });
+        }
 
-    //2° verificamos que los datos recuperados esten validos 
-    if (body === '' || body.username === '')
-        res.status(404).json({ msg: "faltan datos" })
-
-    if (id === '')
-        res.status(404).json({ msg: "faltan datos" })
-
-
-    //3° conexion DB y Consultas
-    const DB = { msg: "asasas" }
-
-    //4° verificamos que los datos devuelto por la DB esten correcto y no VACIO
-    if (DB === '')
-        res.status(500).json({ msg: "error en DB" })
-
-
-    //5°  logica de negocios & post-procesado de datos a enviar
-    const datos = {nombre:"asasas"};
-
-    //6° validar que los datos post-procesados esten todos correcto
-    if (datos === '')
-        res.status(500).json({ msg: "error en los datos a enviar" })
-
-    //7° devolver informacion pedida al usuario
-    const zapato = body.precio
-    res.status(200).json({zapato})
+        res.status(200).json(clientes);
+    } catch (error) {
+        console.error('Error al mostrar clientes:', error);
+        res.status(500).json({ msg: 'Error interno del servidor' });
+    }
 }
 
-// Exporta el enrutador para que pueda ser utilizado en otras partes de la aplicación
 module.exports = router;

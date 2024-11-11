@@ -12,11 +12,8 @@ router.get('/mostrar', mostrarEmpleados)
 
 //localhost:2000/DonJuan/stock/mostrarPorId/50
 
-
-
 async function agregarUs(req, res) {
     try {
-
         const body = req.body
 
         if (!body || !body.id_us) //
@@ -30,8 +27,9 @@ async function agregarUs(req, res) {
 
 
         const usuario = await Usuario.create(
-            { id_rol, dni }
-        ) //crea usuario
+            { id_rol, dni });
+            res.status(201).json({ usuario, persona });
+
 
 
 
@@ -65,10 +63,10 @@ async function modificarUs(req, res, next) {
 
         const body = req.body;
 
-        const persona = await Persona.findByPK(req.params.dni);
+        const persona = await Persona.findByPK(req.params.id_us);
 
         if (!persona) {
-            return res.status(400).json({ msg: "No se encontraron datos" });
+            return res.status(400).json({ msg: "Persona no encontrada" });
         }
 
         const usuario = await Usuario.find({ dni: req.params.dni });
@@ -79,18 +77,15 @@ async function modificarUs(req, res, next) {
         };
 
         //verificacion si existe rol
-
-
         usuario = {
             id_rol: body.id_rol || usuario.id_rol
-
         };
 
         await persona.update();
         await usuario.update();
 
         res.status(201).json({
-            msg: "Actualización echa con éxito"
+            msg: "Actualización éxitosa"
         });
 
     } catch (error) {
@@ -107,21 +102,14 @@ async function mostrarEmpleados(req, res) {
         // Buscar el empleado en la base de datos usando el ID 
         const users = await Usuario.findAll({
             attributes: [], // Especifica los campos que deseas obtener de la tabla 'Usuario'
-            where: {
-                id_role: 2,
-                enable: true
-            },
-            include: [{
-                model: Persona,  // Incluye el modelo 'Persona'
-                attributes: [nombre, apellido, dni, direccion, correo, telefono] // Especifica los campos que deseas obtener de la tabla 'Persona'
+            where: {id_role: 2, enable: true},
+            include: [{model: Persona,  // Incluye el modelo 'Persona'
+            attributes: [nombre, apellido, dni, direccion, email, telefono] // Especifica los campos que deseas obtener de la tabla 'Persona'
             }]
         });
-
         // Verificar si el empleado fue encontrada
-
-
         // Devolver los datos del empleado 
-        // res.status(200).json(empleado);
+        res.status(200).json(users);
     } catch (error) {
         // Manejar cualquier error
         res.status(500).json({ msg: "Error al procesar la solicitud" });
@@ -130,3 +118,4 @@ async function mostrarEmpleados(req, res) {
 
 }
 
+module.exports = router;
