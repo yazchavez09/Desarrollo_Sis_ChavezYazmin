@@ -1,6 +1,6 @@
 // Importa el módulo Express para manejar rutas HTTP
 const express = require('express')
-const Role = require('../models/SQL_Role'); // Importa el modelo Role
+const Role = require('../models/SQL_Rol'); // Importa el modelo Role
 
 // Crea una nueva instancia de Router para definir rutas relacionadas con usuarios
 const router = express.Router()

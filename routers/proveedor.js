@@ -1,22 +1,107 @@
-const express = require('express'); // Importa el módulo Express para construir aplicaciones web
-const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
+const express = require('express');
+const router = express.Router();
+const { Proveedores } = require('../SQL_Proveedores'); // Asegúrate de que este modelo esté definido correctamente
 
-// Define una ruta para las solicitudes HTTP GET a '/home'
-// Esta ruta es relativa a donde se monte este enrutador. Por ejemplo, si se monta en '/api',
-// esta ruta se corresponderá a '/api/home'.
-router.post('/agregar', agregarProveedor)
-router.put('/modificarPorId/:id', modificarProveedor)
-router.get('/mostrar', mostrarProveedor)
+// Rutas
+router.post('/agregar', agregarProveedor);
+router.get('/mostrar', mostrarProveedores); //por dni?
+router.put('/modificar/:dni', modificarProveedor);
+router.put('/eliminar/:dni', eliminarProveedor);
 
-//localhost:2000/DonJuan/stock/mostrarPorId/50
+// Función para agregar un proveedor
+async function agregarProveedor(req, res) {//cuit?
 
-// Puedes definir más rutas HTTP como POST, PUT, DELETE, PATCH aquí.
-// Ejemplos:
-// router.post('/ruta', handlerFunction); // Maneja solicitudes POST en '/ruta'
-// router.put('/ruta', handlerFunction);  // Maneja solicitudes PUT en '/ruta'
-// router.delete('/ruta', handlerFunction); // Maneja solicitudes DELETE en '/ruta'
-// router.patch('/ruta', handlerFunction); // Maneja solicitudes PATCH en '/ruta'
+    const { dni, nombre, direccion, descripcion, correo, telefono } = req.body;
 
-// Función que maneja la solicitud GET a '/home'
-// (info que llega ,  info que sale)
-// (  request      ,    response   )
+    // Validación de datos de entrada
+    if (!dni || !nombre || !direccion || !correo || !telefono) {
+        return res.status(404).json({ msg: "Faltan datos para insertar el proveedor" });
+    }
+
+    try {
+        const nuevoProveedor = await Proveedores.create({ dni, nombre, direccion, descripcion, correo, telefono });
+
+        res.status(201).json({ msg: "Proveedor agregado exitosamente", proveedor: nuevoProveedor });
+
+    } catch (error) {
+        console.error('Error al agregar proveedor:', error);
+        res.status(500).json({ msg: 'Error del servidor' });
+    }
+}
+
+// Función para mostrar todos los proveedores
+async function mostrarProveedores(req, res) {
+    try {
+        const proveedores = await Proveedores.findAll();
+
+        if (!req.isAdmin || !req.isEmpleado) {
+            res.status(401).send('No autorizado');
+        }
+
+        if (!proveedores) {
+            return res.status(404).json({ msg: "No se encontraron proveedores" });
+        }
+        res.status(200).json(proveedores);
+    } catch (error) {
+        res.status(500).json({ msg: 'Error del servidor' });
+    }
+}
+
+// Función para modificar un proveedor por DNI
+async function modificarProveedor(req, res) {
+    const dni = req.params;
+    const { nombre, direccion, descripcion, correo, telefono } = req.body;
+
+    try {
+
+
+        const proveedor = await Proveedores.findByPk(dni);
+
+        if (!req.isAdmin) {
+            res.status(401).send('No autorizado');
+        }
+
+        if (!proveedor) {
+            return res.status(404).json({ msg: "Proveedor no encontrado" });
+        }
+
+        // Actualizar los campos del proveedor
+        await proveedor.update({
+            nombre: nombre || proveedor.nombre,
+            direccion: direccion || proveedor.direccion,
+            descripcion: descripcion || proveedor.descripcion, //vacio
+            correo: correo || proveedor.correo,
+            telefono: telefono || proveedor.telefono
+        });
+
+        res.status(200).json({ msg: "Proveedor actualizado exitosamente", proveedor });
+    } catch (error) {
+        res.status(500).json({ msg: 'Error del servidor' });
+    }
+}
+
+// Función para eliminar un proveedor por DNI
+async function eliminarProveedor(req, res) {
+
+    const dni = req.params;
+
+    try {
+
+        const proveedor = await Proveedores.findByPk(dni);
+
+        if (!req.isAdmin) {
+            res.status(401).send('No autorizado');
+        }
+
+        if (!proveedor) {
+            return res.status(404).json({ msg: "Proveedor no encontrado" });
+        }
+
+        //elimiar
+
+    } catch (error) {
+        res.status(500).json({ msg: 'Error del servidor' });
+    }
+}
+
+module.exports = router;

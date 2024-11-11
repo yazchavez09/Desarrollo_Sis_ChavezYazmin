@@ -28,9 +28,7 @@ async function agregarUs(req, res) {
 
         const usuario = await Usuario.create(
             { id_rol, dni });
-            res.status(201).json({ usuario, persona });
-
-
+        res.status(201).json({ usuario, persona });
 
 
     } catch (error) {
@@ -102,9 +100,10 @@ async function mostrarEmpleados(req, res) {
         // Buscar el empleado en la base de datos usando el ID 
         const users = await Usuario.findAll({
             attributes: [], // Especifica los campos que deseas obtener de la tabla 'Usuario'
-            where: {id_role: 2, enable: true},
-            include: [{model: Persona,  // Incluye el modelo 'Persona'
-            attributes: [nombre, apellido, dni, direccion, email, telefono] // Especifica los campos que deseas obtener de la tabla 'Persona'
+            where: { id_role: 2, enable: true },
+            include: [{
+                model: Persona,  // Incluye el modelo 'Persona'
+                attributes: [nombre, apellido, dni, direccion, email, telefono] // Especifica los campos que deseas obtener de la tabla 'Persona'
             }]
         });
         // Verificar si el empleado fue encontrada

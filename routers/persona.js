@@ -20,18 +20,23 @@ async function agregarPersona(req, res) {
     }
 }
 
-function mostrarPersonas(req, res) {
-    Persona.findAll()
-        .then(personas => {
-            if (!personas.length) {
-                return res.status(404).json({ msg: "No se encontraron personas" });
-            }
-            res.status(200).json(personas);
-        })
-        .catch(error => {
-            console.error('Error al mostrar personas:', error);
-            res.status(500).json({ msg: 'Error interno del servidor' });
-        });
-}
+async function mostrarPersonas(req, res) {
+    try {
 
+        const persona = await Persona.findAll();
+
+
+        if (!req.isAdmin || !req.isEmpleado) {
+            res.status(401).send('No autorizado');
+        }
+
+        if (!persona) {
+            return res.status(404).json({ msg: "No se encontraron personas" });
+        }
+
+        res.status(200).json(proveedores);
+    } catch (error) {
+        res.status(500).json({ msg: 'Error del servidor' });
+    }
+}
 module.exports = router;

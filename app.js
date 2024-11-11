@@ -6,9 +6,14 @@ const cors = require('cors') // Middleware para habilitar CORS (Cross-Origin Res
 
 // Importa los routers y middlewares personalizados
  // Router para manejar rutas relacionadas con el estado del servidor
-const stockRouter = require('./routers/stock')
-const empleado = require ('./routers/empleado')
-
+//const stockRouter = require('./routers/stock')
+const rolRouter = require ('./routers/rol')
+const usuarioRouter = require ('./routers/usuario')
+const personaRouter = require ('./routers/persona')
+const ClienteRouter = require ('./routers/clientes')
+const facturaRouter = require ('./routers/factura')
+const carritoRouter = require ('./routers/carrito')
+const productoRouter = require ('./routers/producto')
 
 // Crea una aplicación Express
 const app = express()
@@ -42,12 +47,15 @@ app.get('/favicon.ico', (req, res) => res.status(204)) // Responde con un códig
 
 
 // Rutas principales de la aplicación
-app.use('/stock',  stockRouter )
-app.use('/empleado', empleado)
-app.use('/cliente', ClienteRouter)
-app.use('/venta', ventaRouter)
-app.use('/factura', facturaRouter)
+//app.use('/stock',  stockRouter )
 
+app.use('/rol', rolRouter)
+app.use('/usuario', usuarioRouter)
+app.use('/persona', personaRouter)
+app.use('/cliente', ClienteRouter)
+app.use('/factura', facturaRouter)
+app.use('/carrito', carritoRouter)
+app.use('/producto', productoRouter)
 
 // Middleware de manejo de errores
 // Este middleware captura errores que no han sido manejados en los middlewares o rutas anteriores

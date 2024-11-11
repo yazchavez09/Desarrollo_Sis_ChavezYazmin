@@ -56,9 +56,9 @@ async function modificarClientes(req, res, next) {
         const persona = await Persona.findByPK(req.params.id_us);
 
         if (!persona) {
-            return res.status(400).json({ msg: "Persona no encontrada" });
+            return res.status(404).json({ msg: "Persona no encontrada" });
         }
-
+        //dni?
         const cliente = await Cliente.find({ dni: req.params.dni });
 
         persona = {
@@ -85,7 +85,9 @@ async function modificarClientes(req, res, next) {
 }
 
 async function mostrarClientes(req, res) {
+
     try {
+
         const clientes = await Cliente.findAll({
             include: {
                 model: Persona,
@@ -93,14 +95,15 @@ async function mostrarClientes(req, res) {
             }
         });
 
-        if (!clientes.length) {
+        if (!clientes) {
             return res.status(404).json({ msg: "No se encontraron clientes" });
         }
 
         res.status(200).json(clientes);
+        
     } catch (error) {
-        console.error('Error al mostrar clientes:', error);
-        res.status(500).json({ msg: 'Error interno del servidor' });
+        
+        res.status(500).json({ msg: 'Error del servidor' });
     }
 }
 

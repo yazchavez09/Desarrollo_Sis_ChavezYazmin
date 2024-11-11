@@ -58,5 +58,5 @@ async function mostrarFactura (req, res, next){
             // Manejar cualquier error que ocurra durante el proceso
             res.status(500).json({ msg: "Error al procesar la solicitud"});
         }
-        .find
+     
 }
