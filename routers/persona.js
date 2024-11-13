@@ -8,7 +8,7 @@ router.get('/mostrar', mostrarPersonas);
 async function agregarPersona(req, res) {
     const json = req.body;
     if (!json || !json.DNI || !json.nombre || !json.apellido || !json.email) {
-        return res.status(400).json({ msg: "Faltan datos para insertar la persona" });
+        return res.status(404).json({ msg: "Faltan datos para insertar la persona" });
     }
 
     try {

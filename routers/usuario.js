@@ -2,6 +2,7 @@ const express = require('express'); // Importa el módulo Express para construir
 const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
 
 const Usuario = require('../models/SQL_Facturacion');
+const Persona = require('../models/SQL_Personas');
 
 // Define una ruta para las solicitudes HTTP GET a '/home'
 // Esta ruta es relativa a donde se monte este enrutador. Por ejemplo, si se monta en '/api',
@@ -16,21 +17,25 @@ async function agregarUs(req, res) {
     try {
         const body = req.body
 
-        if (!body || !body.id_us) //
+        if (!req.body || !req.body.id_us)
             res.status(404).json({ msg: "faltan datos para insertar" })
 
-        const { dni, nombre, apellido, email, telefono, direccion, id_rol } = body;
+        const { dni, nombre, apellido, email, telefono, direccion, id_rol, nombre_us, contraseña } = body;
 
         const persona = await Persona.create(
             { dni, nombre, apellido, email, telefono, direccion }
         )
 
+        if (!persona)
+            res.status(404).json({ msg: "no se pudo insertar al usuario" })
 
         const usuario = await Usuario.create(
-            { id_rol, dni });
-        res.status(201).json({ usuario, persona });
+            { nombre_us, contraseña, id_rol, dni });
 
+        if (!usuario)
+            res.status(404).json({ msg: "no se pudo insertar al usuario" })
 
+        res.status(201).json();
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -54,7 +59,7 @@ async function modificarUs(req, res, next) {
 
     try {
 
-        //localhost:2000/usuario/modificarPorId/5
+        //localhost:2000/usuario/modificarPorId/23569875
 
         //if( !req.isAdmin || !req.isEmpleado )
         //    res.status(401);
@@ -63,15 +68,18 @@ async function modificarUs(req, res, next) {
 
         const persona = await Persona.findByPK(req.params.id_us);
 
-        if (!persona) {
+        if (!persona)
             return res.status(400).json({ msg: "Persona no encontrada" });
-        }
 
-        const usuario = await Usuario.find({ dni: req.params.dni });
+
+        const usuario = await Usuario.findByPK(req.params.id_us);
+
+        if (!usuario)
+            return res.status(400).json({ msg: "Persona no encontrada" });
 
         persona = {
             nombre: body.nombre || persona.nombre,
-            apellido: body.apellido,
+            apellido: body.apellido || persona.apellido,
         };
 
         //verificacion si existe rol
@@ -79,8 +87,14 @@ async function modificarUs(req, res, next) {
             id_rol: body.id_rol || usuario.id_rol
         };
 
-        await persona.update();
-        await usuario.update();
+        const a = await persona.update();
+        const b = await usuario.update();
+
+        if (!a)
+            return res.status(400).json({ msg: "Error con persona" });
+
+        if (!b)
+            return res.status(400).json({ msg: "Error con usuario" }); F
 
         res.status(201).json({
             msg: "Actualización éxitosa"
@@ -99,13 +113,17 @@ async function mostrarEmpleados(req, res) {
 
         // Buscar el empleado en la base de datos usando el ID 
         const users = await Usuario.findAll({
-            attributes: [], // Especifica los campos que deseas obtener de la tabla 'Usuario'
-            where: { id_role: 2, enable: true },
+            attributes: [id_rol], // Especifica los campos que deseas obtener de la tabla 'Usuario'
             include: [{
+                where: { enable: true },
                 model: Persona,  // Incluye el modelo 'Persona'
                 attributes: [nombre, apellido, dni, direccion, email, telefono] // Especifica los campos que deseas obtener de la tabla 'Persona'
             }]
         });
+        
+        if (!users)
+            return res.status(400).json({ msg: "no existen usuarios" });
+
         // Verificar si el empleado fue encontrada
         // Devolver los datos del empleado 
         res.status(200).json(users);

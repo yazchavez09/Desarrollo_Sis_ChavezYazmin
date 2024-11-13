@@ -5,34 +5,27 @@ const Facturacion = require('../models/SQL_Facturacion');
 
 router.post('/agregar', agregarFactura)
 router.get('/mostrar', mostrarFactura)
-router.get('/mostrar:fecha', mostrarFacturaPorF)
+router.get('/mostrar:fecha', mostrarFacturaPorF)//fecha
 
 //localhost:2000/DonJuan/stock/mostrarPorId/50
 
-async function agregarFactura(req, res, next){
+async function agregarFactura(req, res) {
     try {
-        
-        if(!body )
-        res.status(404).json({ msg: "faltan datos para insertar" })
+    const json = req.body;
 
-        const { dni, nombre, apellido, email, telefono, direccion, id_rol } = body;
+    if (!json || !json.monto_F || !json.carrito) { //como llamo carrito
+                                                    //nombre del cliente (capaz tenemos que agrgearlo) y del empleado (cargado)
+                                                    //fecha del día
 
-        const persona = await Carrito.create(
-            { dni, nombre, apellido, email, telefono, direccion }
-        )
+        return res.status(404).json({ msg: "Faltan datos para insertar la factura" });
+    }
 
+        const result = await Facturacion.create(json);
 
-        const usuario = await Usuario.create(
-            { id_rol, dni }
-        ) //crea usuario
-
-
-        // Guardada correctamente
-        res.status(201).json({
-            msg: "Se agregó factura"});
+        res.status(201).json({ Nro_Factura: result.Nro_Factura });
     } catch (error) {
-        // Manejar cualquier error que ocurra durante el proceso
-        res.status(500).json({ msg: "Error al procesar la solicitud"});
+       
+        res.status(500).json({ msg: 'Error del servidor' });
     }
 }
 
@@ -41,8 +34,9 @@ async function mostrarFactura (req, res, next){
     try {
 
         //0° Verificar permisos del usuairo para poder realzar esta accion
-        if (true)
-        res.status(401)
+        if (!req.isAdmin || !req.isEmpleado) {
+            res.status(401).send('No autorizado');
+        }
 
             // Obtener los datos de la factura 
             const factura = await Factura.find();

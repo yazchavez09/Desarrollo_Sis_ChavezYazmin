@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Egresos } = require('../SQL_Egresos'); //proveedor
+const  Egresos  = require('../SQL_Egresos'); //proveedor
 
 // Rutas
 router.post('/agregar', agregarEgreso);
@@ -14,7 +14,7 @@ async function agregarEgreso(req, res) {
 
     // Validación de datos de entrada
     if (!servicio || !proveedor || !vencimiento || monto_E == null) {
-        return res.status(400).json({ msg: "Faltan datos para insertar el egreso" });
+        return res.status(404).json({ msg: "Faltan datos para insertar el egreso" });
     }
 
     try {

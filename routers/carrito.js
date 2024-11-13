@@ -10,7 +10,7 @@ router.get('/mostrar', mostrarCarrito)
 
 //localhost:2000/DonJuan/stock/mostrarPorId/50
 
-async function agregarCarrito(req, res) { //agg producto
+async function agregarCarrito(req, res) { 
 
     const json = req.body;
     if (!json || !json.producto || !json.precioTotal) {
@@ -18,15 +18,15 @@ async function agregarCarrito(req, res) { //agg producto
     }
 
     try {
-        
-        //consulta
+        //agg producto
+        //consulta para traer producto 
 
         const result = await Carrito.create(json);
 
 
         res.status(201).json({ ID: result.Id_carrito });
     } catch (error) {
-        console.error('Error al agregar al carrito:', error);
+        
         res.status(500).json({ msg: 'Error interno del servidor' });
     }
 }

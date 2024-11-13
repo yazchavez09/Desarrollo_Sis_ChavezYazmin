@@ -1,7 +1,7 @@
 const express = require('express'); // Importa el módulo Express para construir aplicaciones web
 const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
 
-const Cliente = require('../models');
+const Cliente = require('../SQL_Clientes');
 
 router.post('/agregar', agregarCliente)
 router.put('/modificarPorId/:id', modificarClientes)
@@ -14,16 +14,15 @@ async function agregarCliente(req, res) {
 
     // Validación de datos de entrada
     if (!dni || !nombre || !apellido || !email || !telefono || !direccion) {
-        return res.status(400).json({ msg: "Faltan datos." });
+        return res.status(404).json({ msg: "Faltan datos." });
     }
 
     try {
-        // Crear una nueva entrada en la tabla Persona
+        // Crear una Persona 
         const nuevaPersona = await Persona.create({
             dni, nombre, apellido, email, telefono, direccion
         });
 
-        // Crear una nueva entrada en la tabla Cliente con referencia al DNI de Persona
         const nuevoCliente = await Cliente.create({
             DNI: nuevaPersona.dni
         });
@@ -34,7 +33,6 @@ async function agregarCliente(req, res) {
             cliente: nuevoCliente
         });
     } catch (error) {
-        console.error('Error al agregar cliente:', error);
         res.status(500).json({ msg: 'Error interno del servidor' });
     }
 }

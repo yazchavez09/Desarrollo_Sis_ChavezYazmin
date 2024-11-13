@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Proveedores } = require('../SQL_Proveedores'); // Asegúrate de que este modelo esté definido correctamente
+const Proveedores  = require('../SQL_Proveedores'); // Asegúrate de que este modelo esté definido correctamente
 
 // Rutas
 router.post('/agregar', agregarProveedor);
