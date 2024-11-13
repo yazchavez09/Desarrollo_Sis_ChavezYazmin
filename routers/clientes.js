@@ -10,14 +10,15 @@ router.get('/mostrar', mostrarClientes)
 //localhost:2000/DonJuan/stock/mostrarPorId/50
 
 async function agregarCliente(req, res) {
-    const { dni, nombre, apellido, email, telefono, direccion } = req.body;
-
-    // Validación de datos de entrada
-    if (!dni || !nombre || !apellido || !email || !telefono || !direccion) {
-        return res.status(404).json({ msg: "Faltan datos." });
-    }
 
     try {
+        const { dni, nombre, apellido, email, telefono, direccion } = req.body;
+
+        // Validación de datos de entrada
+        if (!dni || !nombre || !apellido || !email || !telefono || !direccion) {
+            return res.status(404).json({ msg: "Faltan datos." });
+        }
+
         // Crear una Persona 
         const nuevaPersona = await Persona.create({
             dni, nombre, apellido, email, telefono, direccion
@@ -27,11 +28,7 @@ async function agregarCliente(req, res) {
             DNI: nuevaPersona.dni
         });
 
-        res.status(201).json({
-            msg: "Cliente creado exitosamente",
-            persona: nuevaPersona,
-            cliente: nuevoCliente
-        });
+        res.status(201).json();
     } catch (error) {
         res.status(500).json({ msg: 'Error interno del servidor' });
     }
@@ -98,9 +95,9 @@ async function mostrarClientes(req, res) {
         }
 
         res.status(200).json(clientes);
-        
+
     } catch (error) {
-        
+
         res.status(500).json({ msg: 'Error del servidor' });
     }
 }

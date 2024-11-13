@@ -2,6 +2,7 @@ const express = require('express'); // Importa el módulo Express para construir
 const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
 
 const Facturacion = require('../models/SQL_Facturacion');
+const Facturacion = require('../models/SQL_Carrito');
 
 router.post('/agregar', agregarFactura)
 router.get('/mostrar', mostrarFactura)
@@ -10,15 +11,17 @@ router.get('/mostrar:fecha', mostrarFacturaPorF)//fecha
 //localhost:2000/DonJuan/stock/mostrarPorId/50
 
 async function agregarFactura(req, res) {
+
     try {
+
     const json = req.body;
 
-    if (!json || !json.monto_F || !json.carrito) { //como llamo carrito
-                                                    //nombre del cliente (capaz tenemos que agrgearlo) y del empleado (cargado)
-                                                    //fecha del día
+    if (!json || !json.monto_F || !json.carrito) { //carrito la tabla
 
         return res.status(404).json({ msg: "Faltan datos para insertar la factura" });
     }
+
+    
 
         const result = await Facturacion.create(json);
 
@@ -43,7 +46,7 @@ async function mostrarFactura (req, res, next){
     
             // Verificar que  no esté vacío
             if (!factura) {
-                return res.status(400).json({ msg: "No se encontraron datos" });
+                return res.status(404).json({ msg: "No se encontraron datos" });
             }
             // Devolver el resultado al cliente si la factura fue guardada correctamente
             res.status(201).json({

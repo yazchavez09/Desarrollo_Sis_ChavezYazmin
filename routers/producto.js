@@ -1,46 +1,55 @@
 const express = require('express');
 const router = express.Router();
-const { Productos } = require('../models');
+
+const Producto = require('../models/SQL_Productos');
 
 router.post('/agregar', agregarProducto);
 router.get('/mostrar', mostrarProductos);
+//router.get('/mostrar', mostrarProductos); POR NOMBRE
+
 
 async function agregarProducto(req, res) {
 
     try {
 
-    const json = req.body;
+        const json = req.body;
 
-    if( !req.isAdmin || !req.isEmpleado ) {
-        res.status(401).send('No autorizado');
-    }
+        req.isAdmin = true;
+        if (!req.isAdmin || !req.isEmpleado)
+            res.status(401).send('No autorizado');
 
-    if (!json || !json.id_prod || !json.precioVenta || !json.precioCompra || !json.comercializable) {
-        return res.status(404).json({ msg: "Faltan datos para insertar el producto" });
-    }
-        const resultado = await Productos.create(json);
 
-        res.status(201).json({ ID: resultado.id_prod });
+        if (!json || !json.precioVenta || !json.precioCompra || !json.comercializable) 
+            return res.status(404).json({ msg: "Faltan datos del producto" });
+
+        const resulProducto = await Productos.create(json);
+
+        if (!resulProducto)
+            res.status(404).json({ msg: "no se pudo crear producto" })
+
+        res.status(201).json(resulProducto.id_prod);
 
     } catch (error) {
-        res.status(500).json({ msg: 'Error interno del servidor' });
+        res.status(500).json({ msg: 'Error del servidor' });
     }
+
+    
 }
 
 function mostrarProductos(req, res) {
 
     try {
 
-        if( !req.isAdmin || !req.isEmpleado ) {
+        if (!req.isAdmin || !req.isEmpleado) {
             res.status(401).send('No autorizado');
         }
 
         const producto = Productos.findAll()
 
-            if (!producto) {
+        if (!producto) {
 
-                return res.status(404).json({ msg: "No se encontraron productos" });
-            }
+            return res.status(404).json({ msg: "No se encontraron productos" });
+        }
 
         // Envía la respuesta con los datos del producto
 
@@ -49,7 +58,7 @@ function mostrarProductos(req, res) {
     } catch (error) {
 
         // Maneja cualquier error que ocurra durante la consulta
-        
+
         res.status(500).json({ msg: 'Error del servidor' });
     }
 }

@@ -2,7 +2,7 @@ const express = require('express'); // Importa el módulo Express para construir
 const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
 
 const Usuario = require('../models/SQL_Facturacion');
-const Persona = require('../models/SQL_Personas');
+const Persona = require('../models/SQL_Persona');
 
 // Define una ruta para las solicitudes HTTP GET a '/home'
 // Esta ruta es relativa a donde se monte este enrutador. Por ejemplo, si se monta en '/api',
@@ -37,7 +37,7 @@ async function agregarUs(req, res) {
 
         res.status(201).json();
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ msg: 'Error interno del servidor' });
     }
     /*
     [
@@ -120,9 +120,9 @@ async function mostrarEmpleados(req, res) {
                 attributes: [nombre, apellido, dni, direccion, email, telefono] // Especifica los campos que deseas obtener de la tabla 'Persona'
             }]
         });
-        
+
         if (!users)
-            return res.status(400).json({ msg: "no existen usuarios" });
+            return res.status(404).json({ msg: "no existen usuarios" });
 
         // Verificar si el empleado fue encontrada
         // Devolver los datos del empleado 
