@@ -4,9 +4,10 @@ const Proveedores  = require('../SQL_Proveedores'); // Asegúrate de que este mo
 
 // Rutas
 router.post('/agregar', agregarProveedor);
-router.get('/mostrar', mostrarProveedores); //por dni?
+router.get('/mostrar', mostrarProveedores);
+router.get('/buscar', buscarProveedor);
 router.put('/modificar/:dni', modificarProveedor);
-router.put('/eliminar/:dni', eliminarProveedor);
+router.put('/deshabilitar/:dni', deshabilitarProveedor);
 
 // Función para agregar un proveedor
 async function agregarProveedor(req, res) {//cuit?
@@ -47,6 +48,38 @@ async function mostrarProveedores(req, res) {
     }
 }
 
+// Función para buscar proveedores por nombre y apellido
+async function buscarProveedor(req, res) {
+    try {
+        req.isAdmin = true;
+        if (!req.isAdmin || !req.isEmpleado) {
+            res.status(401).send('No autorizado');
+        }
+        const { nombre, apellido } = req.query;
+
+        // Validar que se hayan pasado los parámetros de búsqueda
+        if (!nombre || !apellido) {
+            return res.status(400).json({ msg: "Debe proporcionar nombre y apellido para la búsqueda" });
+        }
+
+        // Buscar proveedores que coincidan con el nombre y apellido proporcionados
+        const proveedores = await Proveedores.findAll({
+            where: {
+                nombre,
+                apellido
+            }
+        });
+
+        if (!proveedores.length) {
+            return res.status(404).json({ msg: "No se encontraron proveedores con ese nombre y apellido" });
+        }
+
+        res.status(200).json(proveedores);
+    } catch (error) {
+        res.status(500).json({ msg: 'Error del servidor', error });
+    }
+}
+
 // Función para modificar un proveedor por DNI
 async function modificarProveedor(req, res) {
     const dni = req.params;
@@ -80,27 +113,24 @@ async function modificarProveedor(req, res) {
     }
 }
 
-// Función para eliminar un proveedor por DNI
-async function eliminarProveedor(req, res) {
-
-    const dni = req.params;
-
+// Función para deshabilitar un proveedor
+async function deshabilitarProveedor(req, res) {
     try {
+        const dni  = req.params;
 
+        // Buscar el proveedor por su DNI
         const proveedor = await Proveedores.findByPk(dni);
-
-        if (!req.isAdmin) {
-            res.status(401).send('No autorizado');
-        }
 
         if (!proveedor) {
             return res.status(404).json({ msg: "Proveedor no encontrado" });
         }
 
-        //elimiar
+        // Actualizar el campo `habilitado` a `false`
+        await proveedor.update({ habilitado: false });
 
+        res.status(200).json({ msg: "Proveedor deshabilitado exitosamente" });
     } catch (error) {
-        res.status(500).json({ msg: 'Error del servidor' });
+        res.status(500).json({ msg: 'Error del servidor', error });
     }
 }
 

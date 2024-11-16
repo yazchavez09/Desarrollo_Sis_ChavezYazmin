@@ -5,8 +5,7 @@ const Producto = require('../models/SQL_Productos');
 
 router.post('/agregar', agregarProducto);
 router.get('/mostrar', mostrarProductos);
-//router.get('/mostrar', mostrarProductos); POR NOMBRE
-
+router.get('/buscarPorNombre', buscarProductos);
 
 async function agregarProducto(req, res) {
 
@@ -39,12 +38,39 @@ async function agregarProducto(req, res) {
 function mostrarProductos(req, res) {
 
     try {
-
+        req.isAdmin = true;
         if (!req.isAdmin || !req.isEmpleado) {
             res.status(401).send('No autorizado');
         }
 
         const producto = Productos.findAll()
+
+        if (!producto) {
+
+            return res.status(404).json({ msg: "No se encontraron productos" });
+        }
+
+        // Envía la respuesta con los datos del producto
+
+        res.status(200).json(producto);
+
+    } catch (error) {
+
+        // Maneja cualquier error que ocurra durante la consulta
+
+        res.status(500).json({ msg: 'Error del servidor' });
+    }
+}
+
+function buscarProductos(req, res) {
+
+    try {
+
+        if (!req.isAdmin || !req.isEmpleado) {
+            res.status(401).send('No autorizado');
+        }
+
+        const producto = Productos.findAll({where:{nombre}})
 
         if (!producto) {
 

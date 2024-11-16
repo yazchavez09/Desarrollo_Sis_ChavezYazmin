@@ -1,7 +1,7 @@
 const express = require('express'); // Importa el módulo Express para construir aplicaciones web
 const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
 
-const Usuario = require('../models/SQL_Facturacion');
+const Usuario = require('../models/SQL_Usuario');
 const Persona = require('../models/SQL_Persona');
 
 // Define una ruta para las solicitudes HTTP GET a '/home'
@@ -27,13 +27,13 @@ async function agregarUs(req, res) {
         )
 
         if (!persona)
-            res.status(404).json({ msg: "no se pudo insertar al usuario" })
+            res.status(404).json({ msg: "no se pudo crear persona" })
 
         const usuario = await Usuario.create(
             { nombre_us, contraseña, id_rol, dni });
 
         if (!usuario)
-            res.status(404).json({ msg: "no se pudo insertar al usuario" })
+            res.status(404).json({ msg: "no se pudo crear usuario" })
 
         res.status(201).json();
     } catch (error) {
@@ -59,18 +59,12 @@ async function modificarUs(req, res, next) {
 
     try {
 
-        //localhost:2000/usuario/modificarPorId/23569875
-
-        //if( !req.isAdmin || !req.isEmpleado )
-        //    res.status(401);
-
         const body = req.body;
 
-        const persona = await Persona.findByPK(req.params.id_us);
+        const persona = await Persona.findByPK(req.params.dni);
 
         if (!persona)
             return res.status(400).json({ msg: "Persona no encontrada" });
-
 
         const usuario = await Usuario.findByPK(req.params.id_us);
 
@@ -80,6 +74,9 @@ async function modificarUs(req, res, next) {
         persona = {
             nombre: body.nombre || persona.nombre,
             apellido: body.apellido || persona.apellido,
+            email: body.email || persona.email,
+            telefono: body.telefono || persona.telefono,
+            direccion: body.direccion || persona.direccion
         };
 
         //verificacion si existe rol
@@ -120,16 +117,16 @@ async function mostrarEmpleados(req, res) {
                 attributes: [nombre, apellido, dni, direccion, email, telefono] // Especifica los campos que deseas obtener de la tabla 'Persona'
             }]
         });
-
+        // Verificar si el empleado fue encontrada
         if (!users)
             return res.status(404).json({ msg: "no existen usuarios" });
 
-        // Verificar si el empleado fue encontrada
         // Devolver los datos del empleado 
         res.status(200).json(users);
+        
     } catch (error) {
         // Manejar cualquier error
-        res.status(500).json({ msg: "Error al procesar la solicitud" });
+        res.status(500).json({ msg: "Error del servidor" });
     }
 
 

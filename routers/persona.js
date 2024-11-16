@@ -16,7 +16,7 @@ async function agregarPersona(req, res) {
         res.status(201).json({ DNI: result.DNI });
     } catch (error) {
         console.error('Error al agregar persona:', error);
-        res.status(500).json({ msg: 'Error interno del servidor' });
+        res.status(500).json({ msg: 'Error del servidor' });
     }
 }
 
