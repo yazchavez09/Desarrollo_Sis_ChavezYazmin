@@ -12,7 +12,7 @@ const Proveedores = sequelize.define('Proveedores', {
     }
 	
   },
-  nombre: {
+  nombre_proveedor: {
     type: DataTypes.STRING(30),
     allowNull: false,
 	validate: {
@@ -22,7 +22,7 @@ const Proveedores = sequelize.define('Proveedores', {
     }
 	
   },
-  direccion: {
+  direccion_proveedor: {
     type: DataTypes.STRING(30),
     allowNull: false,
 	validate: {
@@ -45,7 +45,7 @@ const Proveedores = sequelize.define('Proveedores', {
       }
     }
   },
-  telefono: {
+  telefono_proveedor: {
     type: DataTypes.STRING(30),
     allowNull: true
   }

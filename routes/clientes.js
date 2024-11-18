@@ -1,8 +1,8 @@
 const express = require('express'); // Importa el módulo Express para construir aplicaciones web
 const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
 
-const Cliente = require('../SQL_Persona');
-const Cliente = require('../SQL_Clientes');
+const Cliente = require('../models/SQL_Clientes');
+const Persona = require('../models/SQL_Persona');
 
 router.post('/agregar', agregarCliente)
 router.put('/modificarPorId/:id', modificarClientes)
@@ -28,8 +28,7 @@ async function agregarCliente(req, res) {
         if (!persona)
             res.status(404).json({ msg: "no se crear persona" })
 
-        const cliente = await Cliente.create(
-            {id_cliente, dni }); //sepone el id? es auto increment
+        const cliente = await Cliente.create(); 
 
         if (!cliente)
             res.status(404).json({ msg: "no se crea cliente" })

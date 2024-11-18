@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./SQL_config');
-const Carrito = require('./SQL_Carrito');
 
+const Carrito = require('./SQL_Carrito');
+const Persona = require('./SQL_Persona'); // Asegúrate de que tienes el modelo Persona
 
 const Facturacion = sequelize.define('Facturacion', {
   nro_factura: {
@@ -12,45 +13,52 @@ const Facturacion = sequelize.define('Facturacion', {
   nombre: {
     type: DataTypes.STRING(30),
     allowNull: false,
-	validate:{
-		notEmpty: {
+    validate: {
+      notEmpty: {
         msg: 'La casilla no puede estar vacía'
       }
-	}
+    }
   },
   apellido: {
     type: DataTypes.STRING(30),
     allowNull: false,
-	validate:{
-		notEmpty: {
+    validate: {
+      notEmpty: {
         msg: 'La casilla no puede estar vacía'
       }
-	}
+    }
   },
-  monto_fijo: {
+  monto_final: {
     type: DataTypes.FLOAT,
     allowNull: false,
-	validate:{
-		notEmpty: {
+    validate: {
+      notEmpty: {
         msg: 'La casilla no puede estar vacía'
       }
-	}
+    }
   },
-  carrito: {
-    type: DataTypes.STRING(30),
+  id_carrito: {
+    type: DataTypes.INTEGER,
     references: {
       model: Carrito,
       key: 'id'
     }
   },
-  vendedor: {
-    type: DataTypes.STRING(30),
+  dni_persona: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Persona,  // Asegúrate de tener el modelo Persona definido correctamente
+      key: 'dni_persona'
+    }
+  },
+  fecha: {
+    type: DataTypes.DATE,
     allowNull: false,
-	validate:{
-		notEmpty: {
+    validate: {
+      notEmpty: {
         msg: 'La casilla no puede estar vacía'
       }
-	}
+    }
   }
 }, {
   tableName: 'facturacion',

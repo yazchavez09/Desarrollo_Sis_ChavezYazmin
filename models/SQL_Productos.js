@@ -7,38 +7,47 @@ const Productos = sequelize.define('Productos', {
     primaryKey: true,
     autoIncrement: true
   },
+  nombre: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    validate: {
+      notEmpty: {
+        msg: 'La casilla no puede estar vacía'
+      }
+    }
+  },
   precio_venta: {
     type: DataTypes.FLOAT,
     allowNull: false,
-	validate:{
-		notEmpty: {
+    validate: {
+      notEmpty: {
         msg: 'La casilla no puede estar vacía'
       }
-	}
+    }
   },
   precio_compra: {
     type: DataTypes.FLOAT,
     allowNull: false,
-	validate:{
-		notEmpty: {
+    validate: {
+      notEmpty: {
         msg: 'La casilla no puede estar vacía'
       }
-	}
+    }
   },
   comercializable: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
-	allowNull: false,
-	validate:{
-		notEmpty: {
+    allowNull: false,
+    validate: {
+      notEmpty: {
         msg: 'La casilla no puede estar vacía'
       }
-	}
+    }
   }
 }, {
   tableName: 'productos',
   timestamps: true
 });
 
-await sequelize.quyery("ALTER TABLE Productos AUTO_INCREMENT = 1000");
+await sequelize.query("ALTER TABLE Productos AUTO_INCREMENT = 1000");
 module.exports = Productos;

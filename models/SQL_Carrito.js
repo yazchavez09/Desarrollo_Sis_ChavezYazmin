@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./SQL_config');
+
 const Productos = require('./SQL_Productos');
 
 const Carrito = sequelize.define('Carrito', {
@@ -8,15 +9,15 @@ const Carrito = sequelize.define('Carrito', {
         primaryKey: true,
         autoIncrement: true
     },
-    producto: {
-        type: DataTypes.STRING(30),
+    id_producto: {
+        type: DataTypes.INTEGER,
         references: {
             model: Productos,
             key: 'id'
         }
     },
-    monto_final: {
-        type: DataTypes.FLOAT,
+    precioTotal: {
+        type: DataTypes.DOUBLE,
         allowNull: false,
         validate: {
             notEmpty: {
@@ -28,3 +29,5 @@ const Carrito = sequelize.define('Carrito', {
     tableName: 'carrito',
     timestamps: true
 });
+
+module.exports = Carrito;

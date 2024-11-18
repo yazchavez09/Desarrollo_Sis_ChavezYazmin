@@ -1,41 +1,43 @@
 // models/initModels.js
-const Persona = require('./Persona');
-const Cliente = require('./Cliente');
-const Proveedor = require('./Proveedor');
-const ItemProveedor = require('./Item_proveedor');
-//const Productos = require('./Productos');
-//const Egresos = require('./Egresos');
-const Facturacion = require('./Facturacion');
-const Carrito = require('./Carrito');
-const Item_carrito = require('./Item_carrito');
+const Rol = require('./SQL_Rol');
+const Persona = require('./SQL_Persona');
+const Usuario = require('./SQL_Usuario');
+const Cliente = require('./SQL_Clientes');
+const Proveedor = require('./SQL_Proveedores');
+const Egresos = require('./SQL_Egresos');
+const Producto = require('./SQL_Productos');
+const Facturacion = require('./SQL_Facturacion');
+const Carrito = require('./SQL_Carrito');
+const Item_carrito = require('./SQL_Item_carrito');
 
-Persona.hasOne(Cliente);
-Cliente.belongsTo(Persona);
+const initModels = () => {
+    Rol.hasOne(Usuario);
+    Usuario.belongsTo(Rol);
 
-Persona.hasOne(Usuario);
-Usuario.belongsTo(Persona);
+    Persona.hasOne(Cliente);
+    Cliente.belongsTo(Persona);
 
-Usuario.hasOne(Rol);
-Rol.belongsTo(Usuario);
+    Persona.hasOne(Usuario);
+    Usuario.belongsTo(Persona);
 
-Proveedor.hasMany(ItemProveedor);
-ItemProveedor.belongsTo(Proveedor);
+    Usuario.hasOne(Rol);
+    Rol.belongsTo(Usuario);
 
-Producto.hasMany(ItemProveedor);
-ItemProveedor.belongsTo(Producto);
+    Producto.hasMany(Item_carrito);
+    Item_carrito.belongsTo(Producto);
 
-Producto.hasMany(Item_carrito);
-Item_carrito.belongsTo(Producto);
+    Carrito.hasMany(Item_carrito);
+    Item_carrito.belongsTo(Carrito);
 
-Carrito.hasMany(Item_carrito);
-Item_carrito.belongsTo(Carrito);
+    Facturacion.hasMany(Carrito);
+    Carrito.belongsTo(Facturacion);
 
-Facturacion.hasMany(Carrito);
-Carrito.belongsTo(Facturacion);
+    Proveedor.hasMany(Egresos);
+    Egresos.belongsTo(Proveedor);
+};
 
-Proveedor.hasMany(Egreso);
-Egreso.belongsTo(Proveedor);
+// Llama a la función de inicialización para definir las relaciones
+initModels();
 
-
-
+// Exporta la función de inicialización para ser utilizada en otros archivos si es necesario
 module.exports = initModels;

@@ -1,13 +1,15 @@
-const express = require('express'); // Importa el módulo Express para construir aplicaciones web
-const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
+const express = require('express');
+const router = express.Router();
 
 const Carrito = require('../models/SQL_Carrito');
+const ItemCarrito = require('../models/SQL_Item_carrito');
 
 router.post('/agregar', agregarCarrito);
 router.put('/modificarTotal/', actualizarCarrito); //calcular precioTotal (no esta hecho)
 router.get('/mostrar', mostrarCarrito);
 
 //localhost:2000/DonJuan/stock/mostrarPorId/50
+
 
 async function agregarCarrito(req, res) { 
 

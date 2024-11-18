@@ -1,6 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./SQL_config');
 
+const Proveedores = require('./SQL_Proveedores');
+
 const Egresos = sequelize.define('Egresos', {
   id: {
     type: DataTypes.INTEGER,
@@ -16,14 +18,13 @@ const Egresos = sequelize.define('Egresos', {
       }
 	}
   },
-  proveedor: {
-    type: DataTypes.STRING(30),
+  dni_proveedor: {
+    type: DataTypes.INTEGER,
     allowNull: false,
-	validate:{
-		notEmpty: {
-        msg: 'La casilla no puede estar vacía'
-      }
-	}
+    references: {
+      model: Proveedores,
+      key: 'dni'
+    }
   },
   vencimiento: {
     type: DataTypes.DATE,

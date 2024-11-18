@@ -3,16 +3,15 @@ const sequelize = require('./SQL_config');
 
 const Rol = sequelize.define('Rol', {
   id: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.INTEGER,  // Cambiado de INTERGER a INTEGER
     primaryKey: true,
     allowNull: false
   },
   
-  tipo:{
-	type: DataTypes.STRING(50),
-	allowNull: false
+  tipo: {
+    type: DataTypes.STRING(30),
+    allowNull: false
   }
-  
   
 }, {
   tableName: 'Rol',

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const Persona = require('../models/SQL_Persona');
 
 router.post('/agregar', agregarPersona);

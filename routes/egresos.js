@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const Egresos = require('../models/SQL_Egresos');
 const Proveedores = require('../models/SQL_Proveedores');
 

@@ -1,5 +1,6 @@
 // Importa el módulo Express para manejar rutas HTTP
 const express = require('express');
+
 const Role = require('../models/SQL_Rol'); // Asegúrate de que este modelo esté bien configurado según tu tabla
 
 // Crea una nueva instancia de Router para definir rutas relacionadas con roles

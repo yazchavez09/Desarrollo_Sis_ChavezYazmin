@@ -43,7 +43,7 @@ const Persona = sequelize.define('Persona', {
     },
     enable: {
         type: DataTypes.BOOLEAN,
-        defaultValue: false
+        defaultValue: true
     },
     telefono: {
         type: DataTypes.STRING,

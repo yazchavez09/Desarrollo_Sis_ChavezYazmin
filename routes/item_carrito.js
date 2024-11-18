@@ -19,7 +19,7 @@ async function agregarProducto(req, res) {
     try {
         const body = req.body
 
-        if (!req.body || !req.body.id_prod)
+        if (!req.body || !req.body.id_producto)
             res.status(404).json({ msg: "faltan datos" })
 
         const prod = await Producto.findByPk(body.id_producto);
@@ -27,7 +27,7 @@ async function agregarProducto(req, res) {
         if (!prod)
             res.status(404).json({ msg: "faltan datos" })
 
-        const subtotal =body.cant_p * prod.precio_venta;
+        const subtotal =body.cant_productos * prod.precio_venta;
 
         const result = await Item_carrito.create( { ...body , subtotal } );
 
@@ -54,7 +54,7 @@ async function EliminarProducto(req, res) {
     const body = req.body;
 
 const eliminar = await Item_carrito.findAll({  
-    where:{id_carrito : body.id_carrito, id_prod : body.producto}
+    where:{id_carrito : body.id_carrito, id_producto : body.producto}
 });
 
 Item_carrito.detete(eliminar);

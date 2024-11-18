@@ -1,7 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./SQL_config');
-const Rol = require('./Rol');
-const Persona = require('./Persona');
+
+const Rol = require('./SQL_Rol');
+const Persona = require('./SQL_Persona');
 
 const Usuario = sequelize.define('Usuario', {
   id: {
@@ -28,14 +29,14 @@ const Usuario = sequelize.define('Usuario', {
       }
     }
   },
-  rol: {
+  id_rol: {
     type: DataTypes.INTEGER,
 	references: {
       model: Rol,
       key: 'id'
     }
   },
-  dni: {
+  dni_persona: {
     type: DataTypes.INTEGER,
 	references: {
 	  model: Persona,
