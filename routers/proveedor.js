@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Proveedores  = require('../SQL_Proveedores'); // Asegúrate de que este modelo esté definido correctamente
+const Proveedores = require('../SQL_Proveedores'); // Asegúrate de que este modelo esté definido correctamente
 
 // Rutas
 router.post('/agregar', agregarProveedor);
@@ -82,17 +82,18 @@ async function buscarProveedor(req, res) {
 
 // Función para modificar un proveedor por DNI
 async function modificarProveedor(req, res) {
-    const dni = req.params;
-    const { nombre, direccion, descripcion, correo, telefono } = req.body;
 
     try {
+        req.isAdmin = true;
 
+        if (!req.isAdmin) 
+            res.status(401).send('No autorizado');
+        
+        const dni = req.params;
+
+        const { nombre, direccion, descripcion, correo, telefono } = req.body;
 
         const proveedor = await Proveedores.findByPk(dni);
-
-        if (!req.isAdmin) {
-            res.status(401).send('No autorizado');
-        }
 
         if (!proveedor) {
             return res.status(404).json({ msg: "Proveedor no encontrado" });
@@ -102,7 +103,7 @@ async function modificarProveedor(req, res) {
         await proveedor.update({
             nombre: nombre || proveedor.nombre,
             direccion: direccion || proveedor.direccion,
-            descripcion: descripcion || proveedor.descripcion, //vacio
+            descripcion: descripcion || proveedor.descripcion,
             correo: correo || proveedor.correo,
             telefono: telefono || proveedor.telefono
         });
@@ -116,7 +117,12 @@ async function modificarProveedor(req, res) {
 // Función para deshabilitar un proveedor
 async function deshabilitarProveedor(req, res) {
     try {
-        const dni  = req.params;
+        req.isAdmin = true;
+
+        if (!req.isAdmin) 
+            res.status(401).send('No autorizado');
+
+        const dni = req.params;
 
         // Buscar el proveedor por su DNI
         const proveedor = await Proveedores.findByPk(dni);

@@ -1,12 +1,11 @@
 const express = require('express'); // Importa el módulo Express para construir aplicaciones web
 const router = express.Router(); // Crea un nuevo enrutador de Express para manejar rutas
 
-const Facturacion = require('../models/SQL_Productos');
-const Facturacion = require('../models/SQL_Carrito');
-const Facturacion = require('../models/SQL_Item_carrito');
+const Item_carrito = require('../models/SQL_Productos');
+const Item_carrito = require('../models/SQL_Carrito');
+const Item_carrito = require('../models/SQL_Item_carrito');
 
 router.post('/agregar', agregarProducto)
-//router.get('/modificar', ModificarItem) //actualizar el precio total
 router.delete('/eliminar', EliminarProducto)
 
 /*
@@ -61,3 +60,5 @@ const eliminar = await Item_carrito.findAll({
 Item_carrito.detete(eliminar);
 
 }
+
+module.exports = router;
