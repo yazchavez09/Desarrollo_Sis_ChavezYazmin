@@ -5,6 +5,7 @@ const Persona = sequelize.define('Persona', {
     dni_persona: {
         type: DataTypes.INTEGER,
         primaryKey: true,
+        allowNull: false,
         validate: {
             notEmpty: {
                 msg: 'La casilla no puede estar vacía'
@@ -32,9 +33,12 @@ const Persona = sequelize.define('Persona', {
     email: {
         type: DataTypes.STRING(50),
         allowNull: false,
+        unique:{
+            msg:"El correo electronico ya está registrado."
+        },
         validate: {
             isEmail: {
-                msg: 'El correo debe ser valido',
+                msg: 'El correo debe ser valido.',
             },
             notEmpty: {
                 msg: 'La casilla no puede estar vacía'
@@ -46,12 +50,10 @@ const Persona = sequelize.define('Persona', {
         defaultValue: true
     },
     telefono: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.STRING
     },
     direccion: {
         type: DataTypes.STRING(50),
-        allowNull: false,
         validate: {
             notEmpty: {
                 msg: 'La casilla no puede estar vacía'

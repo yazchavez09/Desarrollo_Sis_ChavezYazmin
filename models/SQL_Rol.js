@@ -3,7 +3,9 @@ const sequelize = require('./SQL_config');
 
 const Rol = sequelize.define('Rol', {
   id_rol: {
-    type: DataTypes.INTEGER,  // Cambiado de INTERGER a INTEGER
+
+    type: DataTypes.INTEGER,  
+    autoIncrement:true,
     primaryKey: true,
     allowNull: false
   },

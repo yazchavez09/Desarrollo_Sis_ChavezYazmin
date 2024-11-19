@@ -6,8 +6,8 @@ const Proveedores = require('../models/SQL_Proveedores');
 const Egresos = sequelize.define('Egresos', {
   id_egreso: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+    autoIncrement:true,
+    primaryKey: true
   },
   servicio: {
     type: DataTypes.STRING(30),

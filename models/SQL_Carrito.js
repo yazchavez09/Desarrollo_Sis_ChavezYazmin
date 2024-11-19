@@ -6,8 +6,9 @@ const Productos = require('../models/SQL_Productos');
 const Carrito = sequelize.define('Carrito', {
     id_carrito: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
+        autoIncrement:true,
+        primaryKey: true
+
     },
     id_producto: {
         type: DataTypes.INTEGER,

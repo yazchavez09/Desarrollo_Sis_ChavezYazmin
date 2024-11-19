@@ -7,10 +7,11 @@ const Role = require('../models/SQL_Rol'); // Asegúrate de que este modelo est�
 const router = express.Router();
 
 // Define las rutas para los diferentes métodos HTTP
-router.get('/', obtenerRoles); // GET /api/roles
-router.get('/:id_rol', obtenerRolPorId); // GET /api/roles/:id_rol
-router.post('/', agregarRol); // POST /api/roles
-router.put('/:id_rol', actualizarRol); // PUT /api/roles/:id_rol
+
+router.get('/', obtenerRoles); // BODY: none GET http://localhost:3000/rol/
+router.get('/:id_rol', obtenerRolPorId);   //BODY: none GET http://localhost:3000/rol/2
+router.post('/', agregarRol); // Body, raw JSON POST http://localhost:3000/rol/
+router.put('/:id_rol', actualizarRol); //Body, raw JSON PUT http://localhost:3000/rol/2 
 
 // Función para obtener todos los roles
 async function obtenerRoles(req, res) {
