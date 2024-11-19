@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('./SQL_config');
 
 const Persona = sequelize.define('Persona', {
-    dni: {
+    dni_persona: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         validate: {

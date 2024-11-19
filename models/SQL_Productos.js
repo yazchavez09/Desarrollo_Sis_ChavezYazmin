@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('./SQL_config');
 
 const Productos = sequelize.define('Productos', {
-  id: {
+  id_producto: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
@@ -49,5 +49,6 @@ const Productos = sequelize.define('Productos', {
   timestamps: true
 });
 
-await sequelize.query("ALTER TABLE Productos AUTO_INCREMENT = 1000");
+
+
 module.exports = Productos;

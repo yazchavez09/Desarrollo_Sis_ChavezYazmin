@@ -76,7 +76,7 @@ async function mostrarFactura(req, res) {
             order: [['createdAt', 'DESC']],
             include: [
                 { model: Cliente, attributes: ['id_cliente'], include: { model: Persona, attributes: ['nombre', 'apellido'] } },
-                { model: Usuario, attributes: ['id_persona'], include: { model: Persona, attributes: ['nombre', 'apellido'] } }
+                { model: Usuario, attributes: ['dni_persona'], include: { model: Persona, attributes: ['nombre', 'apellido'] } }
             ]
         });
 

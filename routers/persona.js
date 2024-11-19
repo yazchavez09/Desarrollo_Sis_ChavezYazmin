@@ -9,6 +9,7 @@ router.put('/dehabilitar',deshabilitarPersona);
 async function agregarPersona(req, res) {
 
     const json = req.body;
+    
     if (!json || !json.DNI || !json.nombre || !json.apellido || !json.email) {
         return res.status(404).json({ msg: "Faltan datos" });
     }

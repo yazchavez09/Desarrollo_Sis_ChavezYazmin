@@ -13,10 +13,10 @@ router.put('/deshabilitar/:dni', deshabilitarProveedor);
 // Función para agregar un proveedor
 async function agregarProveedor(req, res) {//cuit?
 
-    const { dni, nombre, direccion, descripcion, correo, telefono } = req.body;
+    const { dni_proveedor, nombre_proveedor, direccion_proveedor, descripcion, correo, telefono_proveedor } = req.body;
 
     // Validación de datos de entrada
-    if (!dni || !nombre || !direccion || !correo || !telefono) {
+    if (!dni_proveedor || !nombre_proveedor || !direccion_proveedor || !correo || !telefono_proveedor) {
         return res.status(404).json({ msg: "Faltan datos para insertar el proveedor" });
     }
 
@@ -34,6 +34,7 @@ async function agregarProveedor(req, res) {//cuit?
 // Función para mostrar todos los proveedores
 async function mostrarProveedores(req, res) {
     try {
+
         const proveedores = await Proveedores.findAll();
 
         if (!req.isAdmin || !req.isEmpleado) {
@@ -56,7 +57,7 @@ async function buscarProveedor(req, res) {
         if (!req.isAdmin || !req.isEmpleado) {
             res.status(401).send('No autorizado');
         }
-        const { nombre, apellido } = req.query;
+        const { nombre_proveedor } = req.query;
 
         // Validar que se hayan pasado los parámetros de búsqueda
         if (!nombre || !apellido) {
@@ -66,18 +67,17 @@ async function buscarProveedor(req, res) {
         // Buscar proveedores que coincidan con el nombre y apellido proporcionados
         const proveedores = await Proveedores.findAll({
             where: {
-                nombre,
-                apellido
+                nombre_proveedor,
             }
         });
 
-        if (!proveedores.length) {
+        if (!proveedores) {
             return res.status(404).json({ msg: "No se encontraron proveedores con ese nombre y apellido" });
         }
 
         res.status(200).json(proveedores);
     } catch (error) {
-        res.status(500).json({ msg: 'Error del servidor', error });
+        res.status(500).json({ msg: 'Error del servidor'});
     }
 }
 

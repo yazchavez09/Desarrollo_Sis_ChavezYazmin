@@ -1,11 +1,11 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('./SQL_config');
+const sequelize = require('../models/SQL_config');
 
-const Rol = require('./SQL_Rol');
-const Persona = require('./SQL_Persona');
+const Rol = require('../models/SQL_Rol');
+const Persona = require('../models/SQL_Persona');
 
 const Usuario = sequelize.define('Usuario', {
-  id: {
+  id_usuario: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
@@ -33,14 +33,14 @@ const Usuario = sequelize.define('Usuario', {
     type: DataTypes.INTEGER,
 	references: {
       model: Rol,
-      key: 'id'
+      key: 'id_rol'
     }
   },
   dni_persona: {
     type: DataTypes.INTEGER,
 	references: {
 	  model: Persona,
-	  key: 'dni'
+	  key: 'dni_persona'
 	}
 	}
 }, {

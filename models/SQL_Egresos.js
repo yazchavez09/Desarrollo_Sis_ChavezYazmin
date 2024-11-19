@@ -1,10 +1,10 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./SQL_config');
 
-const Proveedores = require('./SQL_Proveedores');
+const Proveedores = require('../models/SQL_Proveedores');
 
 const Egresos = sequelize.define('Egresos', {
-  id: {
+  id_egreso: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true

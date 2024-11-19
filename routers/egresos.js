@@ -22,7 +22,7 @@ async function agregarEgreso(req, res) {
             return res.status(404).json({ msg: "Proveedor no encontrado" });
         }
 
-        const nuevoEgreso = await Egresos.create({ 
+        const nuevoEgreso = await Egresos.create({
             servicio, dni_proveedor, vencimiento, pago, monto
         });
 
@@ -41,15 +41,23 @@ async function mostrarEgresos(req, res) {
             res.status(401).send('No autorizado');
         }
 
-        const egresos = await Egresos.findAll();
+        const egresos = await Egresos.findAll({
+            include: [
+                {
+                    model: Proveedores,
+                    attributes: ['nombre_proveedor']
+                }
+            ]
+        });
 
-        if(!egresos)
-            return res.status(404).json({msg:"No se encontraron egresos"})
+
+        if (!egresos)
+            return res.status(404).json({ msg: "No se encontraron egresos" })
 
         res.status(200).json(egresos);
 
     } catch (error) {
-        res.status(500).json({ msg: 'Error del servidor'});
+        res.status(500).json({ msg: 'Error del servidor' });
     }
 }
 

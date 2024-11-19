@@ -1,10 +1,10 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./SQL_config');
 
-const Productos = require('./SQL_Productos');
+const Productos = require('../models/SQL_Productos');
 
 const Carrito = sequelize.define('Carrito', {
-    id: {
+    id_carrito: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -13,7 +13,7 @@ const Carrito = sequelize.define('Carrito', {
         type: DataTypes.INTEGER,
         references: {
             model: Productos,
-            key: 'id'
+            key: 'id_producto'
         }
     },
     precioTotal: {

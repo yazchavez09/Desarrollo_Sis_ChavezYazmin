@@ -1,8 +1,9 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./SQL_config');
 
-const Carrito = require('./SQL_Carrito');
-const Persona = require('./SQL_Persona'); // Asegúrate de que tienes el modelo Persona
+const Carrito = require('../models/SQL_Carrito');
+const Cliente = require('../models/SQL_Clientes');
+const Persona = require('../models/SQL_Persona'); // Asegúrate de que tienes el modelo Persona
 
 const Facturacion = sequelize.define('Facturacion', {
   nro_factura: {
@@ -10,22 +11,11 @@ const Facturacion = sequelize.define('Facturacion', {
     primaryKey: true,
     autoIncrement: true
   },
-  nombre: {
-    type: DataTypes.STRING(30),
-    allowNull: false,
-    validate: {
-      notEmpty: {
-        msg: 'La casilla no puede estar vacía'
-      }
-    }
-  },
-  apellido: {
-    type: DataTypes.STRING(30),
-    allowNull: false,
-    validate: {
-      notEmpty: {
-        msg: 'La casilla no puede estar vacía'
-      }
+  id_cliente: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: Cliente,  // Asegúrate de tener el modelo Persona definido correctamente
+      key: 'id_cliente'
     }
   },
   monto_final: {
@@ -41,7 +31,7 @@ const Facturacion = sequelize.define('Facturacion', {
     type: DataTypes.INTEGER,
     references: {
       model: Carrito,
-      key: 'id'
+      key: 'id_carrito'
     }
   },
   dni_persona: {

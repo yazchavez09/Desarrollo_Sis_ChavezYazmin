@@ -1,14 +1,14 @@
 // models/initModels.js
-const Rol = require('./SQL_Rol');
-const Persona = require('./SQL_Persona');
-const Usuario = require('./SQL_Usuario');
-const Cliente = require('./SQL_Clientes');
-const Proveedor = require('./SQL_Proveedores');
-const Egresos = require('./SQL_Egresos');
-const Producto = require('./SQL_Productos');
-const Facturacion = require('./SQL_Facturacion');
-const Carrito = require('./SQL_Carrito');
-const Item_carrito = require('./SQL_Item_carrito');
+const Rol = require('../models/SQL_Rol');
+const Persona = require('../models/SQL_Persona');
+const Usuario = require('../models/SQL_Usuario');
+const Cliente = require('../models/_Clientes');
+const Proveedor = require('../models/SQL_Proveedores');
+const Egresos = require('../models/SQL_Egresos');
+const Producto = require('../models/SQL_Productos');
+const Facturacion = require('../models/SQL_Facturacion');
+const Carrito = require('../models/SQL_Carrito');
+const Item_carrito = require('../models/SQL_Item_carrito');
 
 const initModels = () => {
     Rol.hasOne(Usuario);
