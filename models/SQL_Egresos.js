@@ -17,13 +17,12 @@ const Egresos = sequelize.define('Egresos', {
         msg: 'La casilla no puede estar vacía'
       }
 	}
-  },
+  },//aca error de foreyKey 
   dni_proveedor: {
     type: DataTypes.INTEGER,
-    allowNull: false,
     references: {
       model: Proveedores,
-      key: 'dni'
+      key: 'dni_proveedor'
     }
   },
   vencimiento: {

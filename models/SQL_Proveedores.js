@@ -45,6 +45,10 @@ const Proveedores = sequelize.define('Proveedores', {
       }
     }
   },
+  habilitado: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+},
   telefono_proveedor: {
     type: DataTypes.STRING(30),
     allowNull: true
