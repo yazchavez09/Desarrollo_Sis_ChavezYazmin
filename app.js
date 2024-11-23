@@ -15,6 +15,8 @@ const facturacionRouter = require ('./routers/facturacion');
 const carritoRouter = require ('./routers/carrito');
 const productoRouter = require ('./routers/producto');
 
+const proveedoresRouter = require ('./routers/proveedor');
+const egresosRouter = require ('./routers/egresos');
 
 // Crea una aplicación Express
 const app = express()
@@ -57,6 +59,9 @@ app.use('/cliente', clienteRouter)
 app.use('/factura', facturacionRouter)
 app.use('/carrito', carritoRouter)
 app.use('/producto', productoRouter)
+app.use('/proveedor', proveedoresRouter)
+app.use('/egresos', egresosRouter)
+
 
 // Middleware de manejo de errores
 // Este middleware captura errores que no han sido manejados en los middlewares o rutas anteriores

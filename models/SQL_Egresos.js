@@ -1,9 +1,11 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('./SQL_config');
 
-const Proveedores = require('../models/SQL_Proveedores');
+const Proveedores = require('./SQL_Proveedores'); // Este debe estar antes de definir Egresos
 
 const Egresos = sequelize.define('Egresos', {
+  // definición del modelo
+
   id_egreso: {
     type: DataTypes.INTEGER,
     autoIncrement:true,

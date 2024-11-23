@@ -8,7 +8,8 @@ const Rol = require('../models/SQL_Rol');
 // Rutas
 router.post('/agregar', agregarUs); // http://localhost:3000/usuario/agregar POST Body raw
 router.put('/modificarPorId/:dni_persona/:id_usuario', modificarUs); // http://localhost:3000/usuario/modificarPorId/9945655/2 PUT Body raw
-router.get('/mostrarEmpleados', mostrarEmpleados);
+router.get('/mostrarEmpleados', mostrarEmpleados); //Error
+//BODY: none GET http://localhost:3000/usuario/mostrarEmpleados
 
 async function agregarUs(req, res) {
     try {
@@ -33,7 +34,17 @@ async function agregarUs(req, res) {
         res.status(500).json({ msg: 'Error interno del servidor' });
     }
 }
-
+/*
+{
+    "dni_persona":36916965,
+    "nombre":"yaz",
+    "apellido":"chavez",
+    "email":"yazmin.chavez.et32@gmail.com",
+    "id_rol":1,
+    "nombre_us":"yaz09",
+    "contrasenia":"contra"
+    }
+*/
 async function modificarUs(req, res) {
     try {
         const { dni_persona, id_usuario } = req.params; // Usamos 'id' desde el parámetro de la URL
@@ -75,22 +86,27 @@ async function modificarUs(req, res) {
 async function mostrarEmpleados(req, res) {
     try {
         const users = await Usuario.findAll({
-            attributes: ['id_rol'], // Asegúrate de que 'id_rol' sea una columna válida en Usuario
+            attributes: ['id_rol'], // Verifica que 'id_rol' existe en Usuario
             include: [{
                 model: Persona,
-                where: { enable: true }, // Asegúrate de que 'enable' sea una columna de Persona
-                attributes: ['nombre', 'apellido', 'dni', 'direccion', 'email', 'telefono']
+                as: 'persona', // Usando el alias 'persona'
+                where: { enable: true }, // Verifica que 'enable' existe en Persona
+                attributes: ['nombre', 'apellido', 'dni_persona', 'direccion', 'email', 'telefono']
             }]
         });
 
-        if (!users || users.length === 0) {
+        if (users.length === 0) { // Cambié la condición para verificar si no hay usuarios
             return res.status(404).json({ msg: "No existen usuarios" });
         }
 
         res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({ msg: "Error del servidor" });
+        console.error('Error en mostrarEmpleados:', error); // Imprime el error detallado
+        res.status(500).json({ msg: "Error del servidor", error: error.message, stack: error.stack });
     }
 }
+
+
+
 
 module.exports = router;

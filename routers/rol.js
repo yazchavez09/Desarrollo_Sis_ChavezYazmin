@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get('/', obtenerRoles); // BODY: none GET http://localhost:3000/rol/
 router.get('/:id_rol', obtenerRolPorId);   //BODY: none GET http://localhost:3000/rol/2
-router.post('/', agregarRol); // Body, raw JSON POST http://localhost:3000/rol/
+router.post('/agregar', agregarRol); // Body, raw JSON POST http://localhost:3000/rol/
 router.put('/:id_rol', actualizarRol); //Body, raw JSON PUT http://localhost:3000/rol/2 
 
 // Función para obtener todos los roles

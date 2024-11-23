@@ -3,26 +3,25 @@ const Rol = require('../models/SQL_Rol');
 const Persona = require('../models/SQL_Persona');
 const Usuario = require('../models/SQL_Usuario');
 const Cliente = require('../models/SQL_Clientes');
-const Proveedor = require('../models/SQL_Proveedores');
-const Egresos = require('../models/SQL_Egresos');
 const Producto = require('../models/SQL_Productos');
 const Facturacion = require('../models/SQL_Facturacion');
 const Carrito = require('../models/SQL_Carrito');
 const Item_carrito = require('../models/SQL_Item_carrito');
+const Proveedores = require('../SQL_Proveedores');
+const Egresos = require('../SQL_Egresos');
 
 
 const initModels = () => {
+    // Relación entre Usuario y Rol
     Rol.hasOne(Usuario);
     Usuario.belongsTo(Rol);
 
-    Persona.hasOne(Cliente);
-    Cliente.belongsTo(Persona);
-
+    // Relación entre Persona y Usuario
     Persona.hasOne(Usuario);
     Usuario.belongsTo(Persona);
 
-    Usuario.hasOne(Rol);
-    Rol.belongsTo(Usuario);
+    Persona.hasOne(Cliente);
+    Cliente.belongsTo(Persona);
 
     Producto.hasMany(Item_carrito);
     Item_carrito.belongsTo(Producto);
@@ -34,14 +33,9 @@ const initModels = () => {
     Carrito.belongsTo(Facturacion);
 
     //aca error de foreyKey 
-    Proveedor.hasMany(Egresos, {
-        foreignKey: 'dni_proveedor',
-        sourceKey: 'dni_proveedor',
-    });
-    Egresos.belongsTo(Proveedor, {
-        foreignKey: 'dni_proveedor',
-        targetKey: 'dni_proveedor',
-    });
+    Proveedores.hasMany(Egresos);
+    Egresos.belongsTo(Proveedores);
+    
 };
 
 // Llama a la función de inicialización para definir las relaciones

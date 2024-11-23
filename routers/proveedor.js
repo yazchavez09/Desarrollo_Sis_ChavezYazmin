@@ -4,7 +4,7 @@ const router = express.Router();
 const Proveedores = require('../models/SQL_Proveedores'); // Asegúrate de que este modelo esté definido correctamente
 
 // Rutas
-router.post('/agregar', agregarProveedor);
+router.post('/agregar', agregarProveedor); //http://localhost:3000/proveedor/agregar
 router.get('/mostrar', mostrarProveedores);
 router.get('/buscar', buscarProveedor);
 router.put('/modificar/:dni', modificarProveedor);
@@ -13,6 +13,7 @@ router.put('/deshabilitar/:dni', deshabilitarProveedor);
 // Función para agregar un proveedor
 async function agregarProveedor(req, res) {//cuit?
 
+    try {
     const { dni_proveedor, nombre_proveedor, direccion_proveedor, descripcion, correo, telefono_proveedor } = req.body;
 
     // Validación de datos de entrada
@@ -20,7 +21,7 @@ async function agregarProveedor(req, res) {//cuit?
         return res.status(404).json({ msg: "Faltan datos para insertar el proveedor" });
     }
 
-    try {
+
         const nuevoProveedor = await Proveedores.create({ dni, nombre, direccion, descripcion, correo, telefono });
 
         res.status(201).json({ msg: "Proveedor agregado exitosamente", proveedor: nuevoProveedor });
@@ -30,6 +31,16 @@ async function agregarProveedor(req, res) {//cuit?
         res.status(500).json({ msg: 'Error del servidor' });
     }
 }
+/*
+{
+"dni_proveedor":3697965,
+"nombre_proveedor":"Juan",
+"direccion_proveedor":"Lautaro 1459",
+"descripcion":"vende clavos",
+"correo":"juan1@gmail.com",
+"telefono_proveedor":"yaz09"
+}
+*/
 
 // Función para mostrar todos los proveedores
 async function mostrarProveedores(req, res) {

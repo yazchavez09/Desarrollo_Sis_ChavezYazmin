@@ -2,6 +2,10 @@ const app = require('../app'); // Importa la aplicación principal de Express
 const debug = require('debug')('miprimerapi:server'); // Utiliza debug para la depuración
 const http = require('http'); // Importa el módulo http para crear el servidor
 const figlet = require('figlet'); // Importa figlet para generar texto ASCII
+
+const mongoose = require('mongoose')
+
+
 const pkg = require('../package.json'); // Importa el archivo package.json
 const chalk = require('chalk'); // Importa chalk para colorear la salida en la consola
 const os = require('os'); // Importa os para obtener información del sistema operativo
@@ -16,12 +20,29 @@ const env_path = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
 require('dotenv').config({ path: env_path });
 
 // Configuramos un puerto de acceso a nuestra APP
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.set('port', port);
 
 
 // Crea el servidor HTTP usando la aplicación de Express
 const server = http.createServer(app);
+
+const db_url = process.env.DATABASE_URL 
+const db_database = process.env.DATABASE_DB 
+
+initDatabase()
+.then(  () => console.log('CONEXION CON LA DB.') )
+.catch( (err)=> console.log(err) )
+
+async function initDatabase(){
+    await mongoose.connect( 
+        db_url + db_database ,
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        }
+    );
+}
 
 // Hacemos que el servidor (nuestra aplicación APP) escuche por un PUERTO
 // en caso de que escuche una petición ejecuta la función printTitle()
