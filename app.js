@@ -14,7 +14,7 @@ const clienteRouter = require ('./routers/clientes');
 const facturacionRouter = require ('./routers/facturacion');
 const carritoRouter = require ('./routers/carrito');
 const productoRouter = require ('./routers/producto');
-
+const itemRouter = require ('./routers/item_carrito');
 const proveedoresRouter = require ('./routers/proveedor');
 const egresosRouter = require ('./routers/egresos');
 
@@ -56,9 +56,10 @@ app.use('/rol', rolRouter)
 app.use('/usuario', usuarioRouter)
 app.use('/persona', personaRouter)
 app.use('/cliente', clienteRouter)
-app.use('/factura', facturacionRouter)
+app.use('/facturacion', facturacionRouter)
 app.use('/carrito', carritoRouter)
 app.use('/producto', productoRouter)
+app.use('/item_carrito/',itemRouter)
 app.use('/proveedor', proveedoresRouter)
 app.use('/egresos', egresosRouter)
 

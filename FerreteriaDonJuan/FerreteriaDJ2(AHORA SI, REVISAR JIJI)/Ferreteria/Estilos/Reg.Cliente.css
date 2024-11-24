@@ -1,0 +1,422 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(228, 227, 227);
+}
+
+/* Estilos para el header y el contenedor del menú */
+header {
+    background-color: #009688;
+    color: white;
+    padding: 10px 0;
+    position: relative;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Iconos del menú y logo */
+.menu-icon img,
+.logo img {
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+}
+
+/* Título del header */
+h1 {
+    font-size: 24px;
+    font-weight: normal;
+}
+
+/* Menú desplegable (oculto por defecto) */
+.menu {
+    display: none; /* Ocultar el menú por defecto */
+    background-color: white;
+    position: absolute;
+    top: 64px;
+    width: 200px;
+    border-radius: 10px;
+    z-index: 9999;
+}
+
+/* Mostrar el menú cuando está activo */
+.menu.active {
+    display: block;
+}
+
+/* Estilos para la lista de navegación */
+.pepe {
+    list-style: none;
+    background-color: #009688;
+    height: auto; /* Ajustar la altura según el contenido */
+    padding: 0; /* Eliminar el padding por defecto */
+}
+
+.elementoL {
+    text-align: center;
+}
+
+.elementoL a {
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    color: white;
+}
+
+/* Hover en los elementos del menú */
+.elementoL a:hover {
+    background-color: #3fb1a5;
+    border-radius: 50px;
+}
+
+.inventariotxt {
+    font-size: 24px;
+    text-align: center;
+}
+
+/* Estilos para el buscador */
+.col-12 {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Esto centra el buscador horizontalmente */
+}
+
+/* Ajustar el tamaño del campo de búsqueda */
+.form-control {
+    width: 90%; /* Ocupará el 90% del ancho disponible en pantallas pequeñas */
+    max-width: 300px; /* Limita el ancho máximo del buscador */
+    padding: 10px;
+    font-size: 16px;
+}
+
+
+
+.boton {
+    margin: 0 auto; /* Centrar el botón */
+    margin-top: 20px;
+    width: 150px;
+    height: 35px;
+    background-color: #07366d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px; /* Mantener las esquinas redondeadas */
+    transition: background-color 0.3s ease; /* Suavizar el cambio de color al hacer hover */
+}
+
+.compra {
+    text-decoration: none;
+    color: white;
+    margin-bottom: 25px;
+}
+
+.boton b {
+    text-align: center;
+    font-size: 16px;
+}
+
+/* Cambios de estilo al hacer hover en el botón */
+.compra:hover .boton {
+    background-color: #2f66a5;
+}
+
+/* Media Queries para pantallas más grandes (tablets y desktops) */
+@media (min-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    /* Iconos del menú y logo */
+    .menu-icon img,
+    .logo img {
+        height: 30px; /* Hacer los íconos más pequeños */
+        width: 30px;
+    }
+
+    .form-control {
+        width: 300px;
+    }
+
+    
+}
+
+/* Media Queries para pantallas de escritorio grandes */
+@media (min-width: 1024px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    /* Iconos del menú y logo */
+    .menu-icon img,
+    .logo img {
+        height: 40px;
+        width: 40px;
+        cursor: pointer;
+        margin-left: -90px;
+    }
+
+    
+}
+
+@media (max-width: 480px) {
+    .container {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0 5px;
+    }
+
+    h1 {
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+    .menu-icon img,
+    .logo img {
+        height: 25px;
+        width: 25px;
+    }
+}
+
+
+/*BOTON*/
+
+
+/*:::Boton-Modal:::*/
+.boton-modal,.boton-modal-2{
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+}
+.boton-modal label,.boton-modal-2 label{
+    padding: 10px 15px;
+    
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+    background-color: #009688;
+}
+.boton-modal label:hover,.boton-modal-2 label:hover{
+    background-color: #016e64;
+}
+/*:::Fin Boton-Modal:::*/
+
+
+/*BOTON*/
+
+/*VENTANA EMERGENTE*/
+
+#btn-modal, #btn-modal-2{
+    display: none;
+}
+.container-modal{
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0; left: 0;
+    background-color: rgba(144, 148, 150, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+#btn-modal:checked ~ .container-modal,#btn-modal-2:checked ~ .container-modal{
+    display: flex;
+}
+.content-modal{
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 4px;
+}
+.content-modal h2{
+    margin-bottom: 15px;
+}
+.content-modal p{
+    padding: 15px 0px;
+    border-top: 1px solid #dbdbdb;
+    border-bottom: 1px solid #dbdbdb;
+}
+.cerrar-modal{
+    width:100%;
+    height: 100vh;
+    position: absolute;
+    top:0; left: 0;
+    z-index: -1;
+}
+
+/*VENTANA EMERGENTE*/
+
+/*CONTENIDO DE VENTANA EMERGENTE*/
+
+.ventanaAgg{
+
+    height: 550px;
+    width: 400px;
+    border: 1px solid black;
+    background-color: #0c0636;
+    border-radius: 10px;
+
+}
+.texto_ventanaE{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: white;
+    margin-top: 15px;
+}
+.registro{
+    border-radius: 15px;
+    height: 35px;
+    margin-bottom: 35px;
+    margin-left: 23px;
+}
+
+.registro1{
+    border-radius: 15px;
+    height: 35px;
+    margin-left: 23px;
+
+}
+
+.form-control{
+    height: 40px;
+}
+
+.registro::placeholder{
+    text-align: center;
+}
+.registro1::placeholder{
+    text-align: center;
+}
+
+input{
+    height: 30px;
+    width: 350px;
+    margin-left: 20px;
+    margin-top: 30px;
+}
+
+.btn-cerrar{
+    justify-content: flex-end;
+}
+
+.btn-cerrar label{
+    padding: 7px 10px;
+    background-color: #ff0000;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+
+
+.btn-cerrar label:hover{
+    background-color:#9c0606;
+}
+
+
+
+.siguiente{
+    justify-content: flex-end;
+}
+
+.siguiente label{
+    padding: 7px 10px;
+    background-color: rgb(17, 175, 17);
+    color: black;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+
+.siguiente label:hover{
+    background-color:rgb(58, 189, 58) ;
+}
+.botones{
+    display: flex;
+    justify-content:space-around;
+    margin-top: 10px;
+}
+/*CONTENIDO DE VENTANA EMERGENTE*/
+
+
+
+
+
+.contenedor{
+
+    height: 560px;
+    width: 400px;
+    border: 1px solid black;
+    background-color: #0c0636;
+    margin-left: 50px;
+    border-radius: 10px;
+
+}
+
+.Datos{
+    width: 350px;
+    height: 30px;
+    background-color: white;
+    margin: auto;
+    margin-top: 40px;
+    border-radius: 4px;
+}
+.titulo{
+    font-size: 25px;
+}
+.tituloo{
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: white;
+    padding-top:50px ;
+    margin-left: 75px;
+}
+.a{
+    font-size: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.lapiz{
+    display: flex;
+    align-items: center; /* Alinea el contenido verticalmente */
+    justify-content: center; /* Centra horizontalmente el texto */
+    position: relative; /* Para usar el ícono en una posición exacta */
+    padding: 10px;
+    height: 40px;
+}
+.fotoLapiz{
+    position: absolute; /* Hace que el ícono quede fuera del flujo del diseño */
+    left: 10px; /* Alinea el ícono a la izquierda */
+}
+
+.verFactura{
+
+    height: 35px;
+    width: 150px;
+    border: 1px solid white;
+    text-decoration: none;
+    justify-content: center;
+    display: flex;
+    padding: 5px;
+    background-color: #059b9a;
+    color:white;
+    font-weight: bold;
+    margin-left: 30px;
+    margin-top:40px ;
+
+}

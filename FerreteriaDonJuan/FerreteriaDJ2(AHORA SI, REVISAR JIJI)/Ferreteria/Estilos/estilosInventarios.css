@@ -1,0 +1,310 @@
+/* Estilos generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(228, 227, 227);
+}
+
+/* Estilos para el header y el contenedor del menú */
+header {
+    background-color: #009688;
+    color: white;
+    padding: 10px 0;
+    position: relative;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Iconos del menú y logo */
+.menu-icon img,
+.logo img {
+    height: 40px;
+    width: 40px;
+    cursor: pointer;
+}
+
+/* Título del header */
+h1 {
+    font-size: 24px;
+    font-weight: normal;
+}
+
+/* Menú desplegable (oculto por defecto) */
+.menu {
+    display: none; /* Ocultar el menú por defecto */
+    background-color: white;
+    position: absolute;
+    top: 64px;
+    width: 200px;
+    border-radius: 10px;
+    z-index: 9999;
+}
+
+/* Mostrar el menú cuando está activo */
+.menu.active {
+    display: block;
+}
+
+/* Estilos para la lista de navegación */
+.pepe {
+    list-style: none;
+    background-color: #009688;
+    height: auto; /* Ajustar la altura según el contenido */
+    padding: 0; /* Eliminar el padding por defecto */
+}
+
+.elementoL {
+    text-align: center;
+}
+
+.elementoL a {
+    display: block;
+    padding: 20px;
+    text-decoration: none;
+    color: white;
+}
+
+/* Hover en los elementos del menú */
+.elementoL a:hover {
+    background-color: #3fb1a5;
+    border-radius: 50px;
+}
+
+.inventariotxt {
+    font-size: 24px;
+    text-align: center;
+}
+
+/* Estilos para el buscador */
+.col-12 {
+    width: 100%;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center; /* Esto centra el buscador horizontalmente */
+}
+
+/* Ajustar el tamaño del campo de búsqueda */
+.form-control {
+    width: 90%; /* Ocupará el 90% del ancho disponible en pantallas pequeñas */
+    max-width: 300px; /* Limita el ancho máximo del buscador */
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Estilos para los artículos */
+.art {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 120px; /* Espacio entre los artículos */
+    justify-content: center; /* Centrar los artículos */
+    margin-top: 20px;
+}
+.precioMS{
+    font-size: 20px;
+}
+.titulooo{
+    font-size: 25px;
+}
+
+/* Estilos individuales para los artículos */
+.articulo {
+    height: 450px; /* Aumenta la altura del artículo */
+    width: 300px;
+    margin-top: 60px;
+    background-color: white;
+    overflow: hidden;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.martilloS,
+.pinza,
+.clavos {
+    height: 180px;
+}
+
+.pinza {
+    margin-left: 40px;
+}
+
+.clavos {
+    margin-left: 35px;
+}
+
+.boton {
+    margin: 0 auto; /* Centrar el botón */
+    margin-top: 20px;
+    width: 150px;
+    height: 35px;
+    background-color: #07366d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px; /* Mantener las esquinas redondeadas */
+    transition: background-color 0.3s ease; /* Suavizar el cambio de color al hacer hover */
+}
+
+
+.boton b {
+    text-align: center;
+    font-size: 16px;
+}
+
+
+
+/* Media Queries para pantallas más grandes (tablets y desktops) */
+@media (min-width: 768px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    /* Iconos del menú y logo */
+    .menu-icon img,
+    .logo img {
+        height: 30px; /* Hacer los íconos más pequeños */
+        width: 30px;
+    }
+
+    .form-control {
+        width: 300px;
+    }
+
+    .art {
+        gap: 30px; /* Ajustar el espacio entre artículos */
+    }
+}
+
+/* Media Queries para pantallas de escritorio grandes */
+@media (min-width: 1024px) {
+    .container {
+        padding: 0 20px;
+    }
+
+    /* Iconos del menú y logo */
+    .menu-icon img,
+    .logo img {
+        height: 40px;
+        width: 40px;
+        cursor: pointer;
+    }
+
+    .art {
+        gap: 120px; /* Restablecer el espacio entre artículos */
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0 5px;
+    }
+
+    h1 {
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+    .menu-icon img,
+    .logo img {
+        height: 25px;
+        width: 25px;
+    }
+}
+
+
+/* Estilo para el fondo de la ventana emergente */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.contenido {
+    background: #1c1c3c;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 400px;
+    height: 250px;
+    border: 1px solid black;
+}
+
+.cantidad {
+    padding: 5px 10px;
+    margin: 5px;
+    margin-top: 25px;
+}
+
+.btn-rojo {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 40px;
+    border-radius: 4px;
+    margin-left: 25px;
+}
+
+.btn-verde {
+    background-color:rgb(12, 175, 12) ;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 40px;
+    border-radius: 4px;
+    margin-right: 25px;
+}
+.botones{
+    justify-content: space-between;
+    display: flex;
+}
+.compra {
+    display: block;
+    background-color: #07366d;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    height: 50px;
+    width: 150px;
+}
+
+.compra:hover {
+    background-color: #2f66a5;
+}
+
+
+
+
+
+/*LOS 2 INVENTARIOS HAY QUE COPIAR Y PEGARLOS EN EL QUE ESTA SUBIDO AL DRIVE*/
+/*HAY QUE BORRAR EL MARGIN-LEFT:-360; DE UNO DE LOS MODAL DE 1024PX*/

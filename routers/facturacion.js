@@ -21,16 +21,18 @@ router.get('/mostrarPorCliente/:id_cliente', mostrarFacturasCliente); // Muestra
 async function agregarFactura(req, res) {
 
     try {
-        const { id_cliente, id_carrito, id_usuario } = req.body;
+
+        //agg id_usuario en la sql_
+        const { id_cliente, id_carrito, dni_persona } = req.body;
 
         // Verifica que el cliente esté habilitado
-        const cliente = await Cliente.findOne({ where: { id_cliente, enable: true } });
+        const cliente = await Cliente.findOne({ where: { id_cliente, '$Persona.enable$': true } });
         if (!cliente) {
             return res.status(404).json({ msg: "Cliente no habilitado" });
         }
 
         // Verifica que el vendedor esté habilitado
-        const vendedor = await Usuario.findOne({ where: { id_usuario: id_usuario, '$Persona.enable$': true }, include: Persona });
+        const vendedor = await Persona.findOne({ where: { dni_persona: dni_persona, '$Persona.enable$': true }, include: Persona });
 
         if (!vendedor) {
             return res.status(404).json({ msg: "Vendedor no habilitado" });
@@ -59,7 +61,7 @@ async function agregarFactura(req, res) {
 
         // Crear la factura con la fecha actual
         const fecha_actual = new Date();
-        const result = await Facturacion.create({ id_cliente, monto_F, id_carrito, id_usuario, fecha: fecha_actual });
+        const result = await Facturacion.create({ id_cliente, monto_F, id_carrito, dni_persona, fecha: fecha_actual });
 
         res.status(201).json({ nro_Factura: result.nro_Factura, totalCompra: monto_F, fecha: fecha_actual, productos: carrito.ItemCarritos });
         
