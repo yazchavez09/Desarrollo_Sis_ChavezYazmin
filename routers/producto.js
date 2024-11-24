@@ -10,23 +10,25 @@ router.put('/modificar/:id', modificarProducto);
 router.put('/deshabilitar/:id', deshabilitarProducto);
 
 async function agregarProducto(req, res) {
-
     try {
-        const json = { ...req.body, comercializable: true };
+        const { nombre, precio_compra, precio_venta, comercializable } = req.body;  // Cambié de req.json a req.body
 
-        if (!json||!json.precioVenta || !json.precioCompra) {
+        if (!nombre || !precio_venta || !precio_compra) {  // También cambié json por las variables individuales
             return res.status(404).json({ msg: "Faltan datos del producto" });
         }
-        const resulProducto = await Productos.create(json);
+
+        const resulProducto = await Productos.create({ nombre, precio_compra, precio_venta, comercializable });  // Cambié el objeto a enviar
 
         if (!resulProducto)
-            res.status(404).json({ msg: "no se pudo crear producto" })
+            return res.status(404).json({ msg: "No se pudo crear el producto" });
 
         res.status(201).json(resulProducto);
     } catch (error) {
+        console.error(error);  // Agrega esta línea para capturar el error en la consola
         res.status(500).json({ msg: 'Error del servidor' });
     }
 }
+
 
 
 async function mostrarProductos(req, res) {

@@ -20,7 +20,7 @@ const env_path = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
 require('dotenv').config({ path: env_path });
 
 // Configuramos un puerto de acceso a nuestra APP
-const port = process.env.PORT || 3000;
+const port = process.env.PORT = 3000;
 app.set('port', port);
 
 

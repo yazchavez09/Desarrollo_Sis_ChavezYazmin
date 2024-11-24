@@ -32,7 +32,6 @@ const initModels = () => {
     Facturacion.hasMany(Carrito);
     Carrito.belongsTo(Facturacion);
 
-    //aca error de foreyKey 
     Proveedores.hasMany(Egresos);
     Egresos.belongsTo(Proveedores);
     

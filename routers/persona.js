@@ -22,6 +22,15 @@ async function agregarPersona(req, res) {
         res.status(500).json({ msg: 'Error del servidor' });
     }
 }
+
+/* 
+{
+    "dni_persona":36916965,
+    "nombre":"yaz",
+    "apellido":"chavez",
+    "email":"yazmin.chavez.et32@gmail.com"
+}
+*/
 async function deshabilitarPersona(req, res) {
     try {
         const { dni_persona } = req.params;

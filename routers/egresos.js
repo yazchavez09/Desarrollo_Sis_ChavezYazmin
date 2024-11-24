@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const Egresos = require('../models/SQL_Egresos');
 const Proveedores = require('../models/SQL_Proveedores');
+const Egresos = require('../models/SQL_Egresos');
+
 
 // Rutas
-router.post('/agregar', agregarEgreso);
+router.post('/agregar', agregarEgreso); //http://localhost:3000/egresos/agregar
 router.get('/mostrar', mostrarEgresos);
 router.get('/mostrar/:vencimiento', mostrarEgresosFecha);
 router.put('/modificar/:id', modificarEgreso);
@@ -33,43 +34,49 @@ async function agregarEgreso(req, res) {
 }
 
 // Función para mostrar todos los egresos
-async function mostrarEgresos(req, res) {
 
+
+
+async function mostrarEgresos(req, res) {
     try {
 
+        /*
+        req.isAdmin = true;
         if (!req.isAdmin || !req.isEmpleado) {
             res.status(401).send('No autorizado');
         }
-
+*/
         const egresos = await Egresos.findAll({
+            /* ERROR 
             include: [
                 {
                     model: Proveedores,
+                    as: 'proveedor', // Debe coincidir con el alias en la asociación
                     attributes: ['nombre_proveedor']
                 }
             ]
+            */
+            attributes: { exclude: ['createdAt', 'updatedAt'] }
         });
-
-
-        if (!egresos)
-            return res.status(404).json({ msg: "No se encontraron egresos" })
-
+        if (!egresos) {
+            return res.status(404).json({ msg: "No se encontraron proveedores" });
+        }
         res.status(200).json(egresos);
-
     } catch (error) {
         res.status(500).json({ msg: 'Error del servidor' });
     }
 }
 
+
 // Función para mostrar egresos por fecha de vencimiento
 async function mostrarEgresosFecha(req, res) {
 
     try {
-
+/*
         if (!req.isAdmin || !req.isEmpleado) {
             res.status(401).send('No autorizado');
         }
-
+*/
         const { vencimiento } = req.params;
 
         const egresos = await Egresos.findAll({ where: { vencimiento } });

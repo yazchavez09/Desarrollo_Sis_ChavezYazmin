@@ -17,9 +17,9 @@ async function agregarUs(req, res) {
         const body = req.body;
 
         const { dni_persona, nombre, apellido, email, id_rol, nombre_us, contrasenia } = body;
-        console.log("Datos recibidos:", body);
+
         const persona = await Persona.create({ dni_persona, nombre, apellido, email });
-        console.log("Persona creada:", persona);
+        
         if (!persona) {
             return res.status(404).json({ msg: "No se pudo crear persona" });
         }
